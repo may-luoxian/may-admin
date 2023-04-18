@@ -1,0 +1,104 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/aurora?serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    username: root
+    password: syk20010416
+    hikari:
+      minimum-idle: 10
+      idle-timeout: 180000
+      maximum-pool-size: 100
+      auto-commit: true
+      pool-name: MyHikariCP
+      max-lifetime: 60000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    #    password: abc
+    database: 1
+    lettuce:
+      pool:
+        min-idle: 10
+        max-idle: 100
+        max-active: 100
+        max-wait: 10000
+
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+    listener:
+      simple:
+        retry:
+          enabled: true
+          max-attempts: 3
+          initial-interval: 3000
+
+  elasticsearch:
+    rest:
+      uris: 127.0.0.1:9200
+
+  mail:
+    host: smtp.qq.com
+    username: 2876053639@qq.com
+    password: vchzocrybcvgdehc
+    default-encoding: UTF-8
+    protocol: smtp
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          socketFactory:
+            class: javax.net.ssl.SSLSocketFactory
+            port: 465
+          ssl:
+            enable: true
+          starttls:
+            enable: true
+            required: true
+
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+    map-underscore-to-camel-case: true
+
+search:
+  mode: elasticsearch
+
+upload:
+  mode: minio
+  oss:
+    url: http://Bucket??/
+    endpoint: OSS??endpoint
+    accessKeyId: OSS??accessKeyId
+    accessKeySecret: OSS??accessKeySecret
+    bucketName: OSS??bucketName
+  minio:
+    url: http://127.0.0.1:9000/aurora/
+    endpoint: http://127.0.0.1:9000
+    accesskey: hA7iO3yqJXYY2Hfs
+    secretKey: l7jzH35PDbO2sEzXSNZeGmCANO9SZD9S
+    bucketName: aurora
+
+#website:
+#  url: https://????
+
+qq:
+  app-id: QQ APPID
+  check-token-url: https://graph.qq.com/oauth2.0/me?access_token={access_token}
+  user-info-url: https://graph.qq.com/user/get_user_info?openid={openid}&access_token={access_token}&oauth_consumer_key={oauth_consumer_key}

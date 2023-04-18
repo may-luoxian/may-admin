@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myblog.mapper.MenuMapper">
+    <select id="listUserMenu" resultType="com.myblog.entity.Menu">
+        SELECT DISTINCT id,
+                        name,
+                        menu_type,
+                        path,
+                        component,
+                        icon,
+                        create_time,
+                        update_time,
+                        order_num,
+                        parent_id,
+                        is_hidden
+        from my_blog.t_menu;
+    </select>
+</mapper>
