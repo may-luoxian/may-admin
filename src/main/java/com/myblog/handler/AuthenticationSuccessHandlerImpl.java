@@ -11,11 +11,11 @@ import com.myblog.service.TokenService;
 import com.myblog.util.BeanCopyUtil;
 import com.myblog.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -34,7 +34,7 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
      * 登录成功流程
      */
     @Override
-    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException {
         // 构建用户登录响应数据
         UserInfoDTO userLoginDTO = BeanCopyUtil.copyObject(UserUtil.getUserDetailsDTO(), UserInfoDTO.class);
         if(Objects.nonNull(userLoginDTO)) {
@@ -51,6 +51,7 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
     /**
      * 更新数据库用户权限数据
      */
+    @Async
     public void updateUserInfo() {
         UserAuth userAuth = UserAuth.builder()
                 .id(UserUtil.getUserDetailsDTO().getId())

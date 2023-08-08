@@ -1,30 +1,56 @@
 package com.myblog.handler;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.myblog.mapper.RoleMapper;
+import com.myblog.model.dto.ResourceRoleDTO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.access.SecurityConfig;
+import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
 
+import javax.annotation.PostConstruct;
 import java.util.Collection;
+import java.util.List;
+
 @Component
 public class FilterInvocationSecurityMetadataSourceImpl implements FilterInvocationSecurityMetadataSource {
+
+    @Autowired
+    private RoleMapper roleMapper;
+
+    private static List<ResourceRoleDTO> resourceRoleList;
+
+    @PostConstruct
+    private void loadResourceRoleList() {
+        resourceRoleList = roleMapper.listResourceRoles();
+    }
+
+    public void clearDataSource() {
+        resourceRoleList = null;
+    }
+
+    // 获取访问当前资源所需权限，并对不满足条件的请求进行拦截
     @Override
-    public Collection<ConfigAttribute> getAttributes(Object o) throws IllegalArgumentException {
-//        if (CollectionUtils.isEmpty(resourceRoleList)) {
-//            this.loadResourceRoleList();
-//        }
-//        FilterInvocation fi = (FilterInvocation) object;
-//        String method = fi.getRequest().getMethod();
-//        String url = fi.getRequest().getRequestURI();
-//        AntPathMatcher antPathMatcher = new AntPathMatcher();
-//        for (ResourceRoleDTO resourceRoleDTO : resourceRoleList) {
-//            if (antPathMatcher.match(resourceRoleDTO.getUrl(), url) && resourceRoleDTO.getRequestMethod().equals(method)) {
-//                List<String> roleList = resourceRoleDTO.getRoleList();
-//                if (CollectionUtils.isEmpty(roleList)) {
-//                    return SecurityConfig.createList("disable");
-//                }
-//                return SecurityConfig.createList(roleList.toArray(new String[]{}));
-//            }
-//        }
+    public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
+        if (CollectionUtils.isEmpty(resourceRoleList)) {
+            this.loadResourceRoleList();
+        }
+        FilterInvocation fi = (FilterInvocation) object;
+        String method = fi.getRequest().getMethod();
+        String url = fi.getRequest().getRequestURI();
+        AntPathMatcher antPathMatcher = new AntPathMatcher();
+        for (ResourceRoleDTO resourceRoleDTO : resourceRoleList) {
+            if (antPathMatcher.match(resourceRoleDTO.getUrl(), url) && resourceRoleDTO.getRequestMethod().equals(method)) {
+                List<String> roleList = resourceRoleDTO.getRoleList();
+                if (CollectionUtils.isEmpty(roleList)) {
+                    return SecurityConfig.createList("disable");
+                }
+                return SecurityConfig.createList(roleList.toArray(new String[]{}));
+            }
+        }
         return null;
     }
 
@@ -35,6 +61,6 @@ public class FilterInvocationSecurityMetadataSourceImpl implements FilterInvocat
 
     @Override
     public boolean supports(Class<?> aClass) {
-        return false;
+        return FilterInvocation.class.isAssignableFrom(aClass);
     }
 }

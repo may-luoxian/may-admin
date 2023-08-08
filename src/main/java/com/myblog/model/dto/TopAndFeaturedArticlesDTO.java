@@ -5,11 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-//@Data
-//@Builder
-//@NoArgsConstructor
-//@AllArgsConstructor
+import java.util.List;
+
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 //置顶和推荐返回数据
 public class TopAndFeaturedArticlesDTO {
-    //置顶文章
+    private ArticleCardDTO articleCardDTO;
+    private List<ArticleCardDTO> articleCardDTOList;
 }

@@ -34,6 +34,7 @@ public class Menu {
 
     private Integer isHidden;
 
+
     //根据配置类MyMetaObjectHandler在插入时自动填充
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;

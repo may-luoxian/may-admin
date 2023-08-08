@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myblog.mapper.RoleMapper">
+    <resultMap id="roleMap" type="com.myblog.model.dto.RoleDTO">
+        <id property="id" column="id"></id>
+        <result property="roleName" column="role_name"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="isDisable" column="is_disable"></result>
+        <collection property="resourceIds" ofType="java.lang.Integer">
+            <constructor>
+                <arg column="resource_id"/>
+            </constructor>
+        </collection>
+        <collection property="menuIds" ofType="java.lang.Integer">
+            <constructor>
+                <arg column="menu_id"/>
+            </constructor>
+        </collection>
+    </resultMap>
+    <resultMap id="resourceRoleResultMap" type="com.myblog.model.dto.ResourceRoleDTO">
+        <id property="id" column="id"/>
+        <result property="url" column="url"/>
+        <result property="requestMethod" column="request_method"/>
+        <collection property="roleList" ofType="java.lang.String">
+            <constructor>
+                <arg column="role_name"/>
+            </constructor>
+        </collection>
+    </resultMap>
+    <select id="listResourceRoles" resultMap="resourceRoleResultMap">
+        SELECT re.id AS id,
+               url,
+               request_method,
+               role_name
+        FROM t_resource re
+                 LEFT JOIN t_role_resource rr ON re.id = rr.resource_id
+                 LEFT JOIN t_role ro ON rr.role_id = ro.id
+        WHERE re.parent_id IS NOT NULL
+          AND is_anonymous = 0;
+    </select>
+    <select id="listRolesByUserInfoId" resultType="java.lang.String">
+        SELECT role_name
+        FROM t_role r
+                 LEFT JOIN t_user_role ur ON r.id = ur.role_id
+        WHERE ur.user_id = #{userInfoId}
+    </select>
+    <select id="listRoles" resultMap="roleMap">
+        SELECT r.id, r.role_name, r.create_time, r.is_disable, rr.resource_id, rm.menu_id
+        FROM (SELECT id, role_name, is_disable, create_time
+        FROM t_role
+        <where>
+            <if test="conditionVO.keywords != null">
+                role_name LIKE CONCAT('%', #{conditionVO.keywords}, '%')
+            </if>
+        </where>
+        LIMIT #{current}, #{size}) r
+        LEFT JOIN t_role_resource rr ON r.id = rr.role_id
+        LEFT JOIN t_role_menu rm ON r.id = rm.role_id
+        ORDER BY r.id;
+    </select>
+</mapper>

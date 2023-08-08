@@ -28,5 +28,7 @@ public class UserMenuDTO {
 
     private Integer parentId;
 
+    private Integer orderNum;
+
     private List<UserMenuDTO> children;
 }

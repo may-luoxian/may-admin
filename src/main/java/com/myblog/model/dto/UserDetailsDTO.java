@@ -12,8 +12,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
-import java.text.SimpleDateFormat;
+import java.beans.Transient;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
@@ -68,13 +67,11 @@ public class UserDetailsDTO implements UserDetails {
     private LocalDateTime lastLoginTime;
 
     @Override
+    @Transient
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return null;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
+        return roles.stream()
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toSet());
     }
 
     @Override
@@ -83,21 +80,30 @@ public class UserDetailsDTO implements UserDetails {
     }
 
     @Override
+    public String getPassword() {
+        return password;
+    }
+
+    @Override
+    @Transient
     public boolean isAccountNonExpired() {
         return true;
     }
 
     @Override
+    @Transient
     public boolean isAccountNonLocked() {
         return this.isDisable.equals(CommonConstant.FALSE);
     }
 
     @Override
+    @Transient
     public boolean isCredentialsNonExpired() {
         return true;
     }
 
     @Override
+    @Transient
     public boolean isEnabled() {
         return true;
     }

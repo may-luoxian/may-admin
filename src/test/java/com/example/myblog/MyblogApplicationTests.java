@@ -5,9 +5,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 class MyblogApplicationTests {
+    public static void main(String[] args) {
 
-    @Test
-    void contextLoads() {
+    }
+    void contextLoads(int n) {
+        int i;
+        long f = n;
+        for (i = 1; i <= n; i++) {
+            f = f * 2;
+        }
     }
 
 }

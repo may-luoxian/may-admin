@@ -1,11 +1,11 @@
 server:
-  port: 8081
+  port: 8080
 
 spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://127.0.0.1:3306/my_blog?serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    url: jdbc:mysql://localhost:3306/my_blog?serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
     password: syk20010416
     hikari:
@@ -19,10 +19,10 @@ spring:
       connection-test-query: SELECT 1
 
   redis:
-    host: 127.0.0.1
+    host: localhost
     port: 6379
-    #    password: abc
-    database: 1
+    password: syk20010416
+    database: 0
     lettuce:
       pool:
         min-idle: 10

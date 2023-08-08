@@ -11,7 +11,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * AccessDecisionManager 决策管理
+ */
 public class AccessDecisionManagerImpl implements AccessDecisionManager {
+    // 授权决策
     @Override
     public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> collection) throws AccessDeniedException, InsufficientAuthenticationException {
         List<String> permissionList = authentication.getAuthorities()

@@ -46,6 +46,7 @@ public class TokenServiceImpl implements TokenService {
                 .signWith(signatureAlgorithm, secretKey).compact();
     }
 
+    // 根据生成token时使用的密钥逆向解密token
     @Override
     public Claims parseToken(String token) {
         SecretKey secretKey = generalKey();
@@ -54,17 +55,20 @@ public class TokenServiceImpl implements TokenService {
 
     @Override
     public void renewToken(UserDetailsDTO userDetailsDTO) {
-        LocalDateTime expireTime = userDetailsDTO.getExpireTime();
-        LocalDateTime currentTime = LocalDateTime.now();
-        if (Duration.between(currentTime, expireTime).toMinutes() <= TWENTY_MINUTES) {
+        LocalDateTime expireTime = userDetailsDTO.getExpireTime(); // 过期时间
+        LocalDateTime currentTime = LocalDateTime.now(); // 当前时间
+        if (Duration.between(currentTime, expireTime).toMinutes() <= TWENTY_MINUTES) { // 如果当前时间距离结束时间小于20分钟，则更新token过期时间
             refreshToken(userDetailsDTO);
         }
     }
 
+    /**
+     * 更新token过期时间
+     */
     @Override
     public void refreshToken(UserDetailsDTO userDetailsDTO) {
-        LocalDateTime currentTime = LocalDateTime.now();
-        userDetailsDTO.setExpireTime(currentTime.plusSeconds(EXPIRE_TIME));
+        LocalDateTime currentTime = LocalDateTime.now(); // 获取当前时间
+        userDetailsDTO.setExpireTime(currentTime.plusSeconds(EXPIRE_TIME)); // 设置过期时间为当前时间加7小时
         String userId = userDetailsDTO.getId().toString();
         redisService.hSet(LOGIN_USER, userId, userDetailsDTO, EXPIRE_TIME);
     }
@@ -75,7 +79,9 @@ public class TokenServiceImpl implements TokenService {
      */
     @Override
     public UserDetailsDTO getUserDetailDTO(HttpServletRequest request) {
+        // 从请求中获取token，并将token前的bearer 删除，如果为空则返回“”，否则返回token
         String token = Optional.ofNullable(request.getHeader(TOKEN_HEADER)).orElse("").replaceFirst(TOKEN_PREFIX, "");
+        // 如果token非空，从redis中通过userid获取该用户信息，构建UserDetailDTO
         if (StringUtils.hasText(token) && !token.equals("null")) {
             Claims claims = parseToken(token);
             String userId = claims.getSubject();
@@ -84,6 +90,7 @@ public class TokenServiceImpl implements TokenService {
         return null;
     }
 
+    // 获取解析token密钥
     public SecretKey generalKey() {
         byte[] encodedKey = Base64.getDecoder().decode(SECRET);
         return new SecretKeySpec(encodedKey, 0, encodedKey.length, "AES");
