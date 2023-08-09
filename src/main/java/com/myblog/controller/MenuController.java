@@ -1,5 +1,7 @@
 package com.myblog.controller;
 
+import com.myblog.model.dto.LabelOptionDTO;
+import com.myblog.model.dto.MenuDTO;
 import com.myblog.model.dto.UserMenuDTO;
 import com.myblog.model.vo.MenuVO;
 import com.myblog.model.vo.ResultVO;
@@ -36,7 +38,14 @@ public class MenuController {
 
     @ApiOperation("获取系统路由")
     @GetMapping("/admin/menus")
-    public ResultVO listMenus() {
+    public ResultVO<List<MenuDTO>> listMenus() {
         return ResultVO.ok(menuService.listMenus());
     }
+
+    @ApiOperation(value = "查询角色菜单")
+    @GetMapping("/admin/role/menus")
+    public ResultVO<List<LabelOptionDTO>> listRoleMenus() {
+        return ResultVO.ok(menuService.listRoleMenus());
+    }
+
 }

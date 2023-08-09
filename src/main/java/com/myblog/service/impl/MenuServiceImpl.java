@@ -1,8 +1,10 @@
 package com.myblog.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.myblog.entity.Menu;
+import com.myblog.model.dto.LabelOptionDTO;
 import com.myblog.model.dto.MenuDTO;
 import com.myblog.model.dto.UserMenuDTO;
 import com.myblog.mapper.MenuMapper;
@@ -66,6 +68,45 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     public void saveOrUpdateMenu(MenuVO menuVO) {
         Menu menu = BeanCopyUtil.copyObject(menuVO, Menu.class);
         this.saveOrUpdate(menu);
+    }
+
+    @Override
+    public List<LabelOptionDTO> listRoleMenus() {
+        List<Menu> menus = menuMapper.selectList(null);
+        List<Menu> catalogs = listCatalogs(menus);
+        Map<Integer, List<Menu>> childrenMap = getMenuMap(menus);
+        HashMap<Integer, List<LabelOptionDTO>> labelOptionDTOListHashMap = new HashMap<>();
+        childrenMap.forEach((id, menuList) -> {
+            labelOptionDTOListHashMap.put(id, menuList.stream()
+                    .map((item) -> LabelOptionDTO.builder()
+                            .id(item.getId())
+                            .label(item.getName())
+                            .icon(item.getIcon())
+                            .orderNum(item.getOrderNum())
+                            .build())
+                    .collect(Collectors.toList()));
+        });
+        List<LabelOptionDTO> rootList = catalogs.stream()
+                .map(item -> LabelOptionDTO.builder()
+                        .id(item.getId())
+                        .label(item.getName())
+                        .icon(item.getIcon())
+                        .orderNum(item.getOrderNum())
+                        .build())
+                .sorted(Comparator.comparing(LabelOptionDTO::getOrderNum))
+                .collect(Collectors.toList());
+        recursionLabelOptionTree(rootList, labelOptionDTOListHashMap);
+        return rootList;
+    }
+
+    private void recursionLabelOptionTree(List<LabelOptionDTO> list, Map<Integer, List<LabelOptionDTO>> map) {
+        for (LabelOptionDTO labelOptionDTO : list) {
+            List<LabelOptionDTO> childList = map.get(labelOptionDTO.getId());
+            labelOptionDTO.setChildren(childList);
+            if (childList != null && childList.size() > 0) {
+                recursionLabelOptionTree(childList, map);
+            }
+        }
     }
 
     private void recursionUserTree(List<UserMenuDTO> list, Map<Integer, List<UserMenuDTO>> map) {

@@ -2,6 +2,7 @@ package com.myblog.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.myblog.entity.Menu;
+import com.myblog.model.dto.LabelOptionDTO;
 import com.myblog.model.dto.MenuDTO;
 import com.myblog.model.dto.UserMenuDTO;
 import com.myblog.model.vo.MenuVO;
@@ -17,4 +18,7 @@ public interface MenuService extends IService<Menu> {
 
     // 新增或修改菜单
     void saveOrUpdateMenu(MenuVO menuVO);
+
+    // 查询角色菜单
+    List<LabelOptionDTO> listRoleMenus();
 }
