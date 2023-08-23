@@ -18,7 +18,4 @@ public interface MenuService extends IService<Menu> {
 
     // 新增或修改菜单
     void saveOrUpdateMenu(MenuVO menuVO);
-
-    // 查询角色菜单
-    List<LabelOptionDTO> listRoleMenus();
 }

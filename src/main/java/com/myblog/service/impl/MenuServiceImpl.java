@@ -11,6 +11,7 @@ import com.myblog.mapper.MenuMapper;
 import com.myblog.model.vo.MenuVO;
 import com.myblog.service.MenuService;
 import com.myblog.util.BeanCopyUtil;
+import com.myblog.util.TreeUtil;
 import com.myblog.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -41,7 +42,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             List<UserMenuDTO> menuDTOList = BeanCopyUtil.copyList(menuList, UserMenuDTO.class);
             childDTOMap.put(id, menuDTOList);
         });
-        recursionUserTree(rootList, childDTOMap);
+        UserMenuDTO t = new UserMenuDTO();
+        TreeUtil.buildTree(rootList, childDTOMap, t, "children");
         return rootList;
     }
 
@@ -59,7 +61,8 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             List<MenuDTO> menuDTOList = BeanCopyUtil.copyList(menuList, MenuDTO.class);
             childDTOMap.put(id, menuDTOList);
         });
-        recursionTree(rootList, childDTOMap);
+        MenuDTO t = new MenuDTO();
+        TreeUtil.buildTree(rootList, childDTOMap, t, "children");
         return rootList;
     }
 
@@ -68,65 +71,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     public void saveOrUpdateMenu(MenuVO menuVO) {
         Menu menu = BeanCopyUtil.copyObject(menuVO, Menu.class);
         this.saveOrUpdate(menu);
-    }
-
-    @Override
-    public List<LabelOptionDTO> listRoleMenus() {
-        List<Menu> menus = menuMapper.selectList(null);
-        List<Menu> catalogs = listCatalogs(menus);
-        Map<Integer, List<Menu>> childrenMap = getMenuMap(menus);
-        HashMap<Integer, List<LabelOptionDTO>> labelOptionDTOListHashMap = new HashMap<>();
-        childrenMap.forEach((id, menuList) -> {
-            labelOptionDTOListHashMap.put(id, menuList.stream()
-                    .map((item) -> LabelOptionDTO.builder()
-                            .id(item.getId())
-                            .label(item.getName())
-                            .icon(item.getIcon())
-                            .orderNum(item.getOrderNum())
-                            .build())
-                    .collect(Collectors.toList()));
-        });
-        List<LabelOptionDTO> rootList = catalogs.stream()
-                .map(item -> LabelOptionDTO.builder()
-                        .id(item.getId())
-                        .label(item.getName())
-                        .icon(item.getIcon())
-                        .orderNum(item.getOrderNum())
-                        .build())
-                .sorted(Comparator.comparing(LabelOptionDTO::getOrderNum))
-                .collect(Collectors.toList());
-        recursionLabelOptionTree(rootList, labelOptionDTOListHashMap);
-        return rootList;
-    }
-
-    private void recursionLabelOptionTree(List<LabelOptionDTO> list, Map<Integer, List<LabelOptionDTO>> map) {
-        for (LabelOptionDTO labelOptionDTO : list) {
-            List<LabelOptionDTO> childList = map.get(labelOptionDTO.getId());
-            labelOptionDTO.setChildren(childList);
-            if (childList != null && childList.size() > 0) {
-                recursionLabelOptionTree(childList, map);
-            }
-        }
-    }
-
-    private void recursionUserTree(List<UserMenuDTO> list, Map<Integer, List<UserMenuDTO>> map) {
-        for (UserMenuDTO menuDTO : list) {
-            List<UserMenuDTO> childList = map.get(menuDTO.getId());
-            menuDTO.setChildren(childList);
-            if (childList != null && childList.size() > 0) {
-                recursionUserTree(childList, map);
-            }
-        }
-    }
-
-    private void recursionTree(List<MenuDTO> list, Map<Integer, List<MenuDTO>> map) {
-        for (MenuDTO menuDTO : list) {
-            List<MenuDTO> childList = map.get(menuDTO.getId());
-            menuDTO.setChildren(childList);
-            if (childList != null && childList.size() > 0) {
-                recursionTree(childList, map);
-            }
-        }
     }
 
     private List<Menu> listCatalogs(List<Menu> menus) {

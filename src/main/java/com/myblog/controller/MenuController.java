@@ -9,15 +9,12 @@ import com.myblog.service.MenuService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
 
-@Api(tags = "系统模块")
+@Api(tags = "菜单模块")
 @RestController
 public class MenuController {
     @Autowired
@@ -36,16 +33,9 @@ public class MenuController {
         return ResultVO.ok();
     }
 
-    @ApiOperation("获取系统路由")
+    @ApiOperation("查询系统路由")
     @GetMapping("/admin/menus")
     public ResultVO<List<MenuDTO>> listMenus() {
         return ResultVO.ok(menuService.listMenus());
     }
-
-    @ApiOperation(value = "查询角色菜单")
-    @GetMapping("/admin/role/menus")
-    public ResultVO<List<LabelOptionDTO>> listRoleMenus() {
-        return ResultVO.ok(menuService.listRoleMenus());
-    }
-
 }

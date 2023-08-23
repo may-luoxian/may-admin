@@ -11,8 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TestVO {
-    private Integer id;
+//    private Integer id;
     private String name;
-    private String state;
+    private String suffix;
     private MultipartFile file;
 }

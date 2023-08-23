@@ -4,11 +4,18 @@ import com.myblog.model.vo.ResultVO;
 import com.myblog.model.vo.TestVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
 
 @Api(tags = "测试模块")
 @RestController
 public class TestController {
+
     @ApiOperation(value = "测试GET请求1")
     @GetMapping(value = "/test/get_request1")
     public ResultVO<?> testGetRequest1(@RequestParam(value = "state") Integer s, @RequestParam(value = "name") String n) {
@@ -30,6 +37,20 @@ public class TestController {
     @ApiOperation(value = "测试POST请求2文件")
     @PostMapping(value = "/test/post_request2")
     public ResultVO<?> testPostRequest2(TestVO testVO) {
+        return ResultVO.ok();
+    }
+
+    @ApiOperation(value = "上传文件到该项目static目录")
+    @PostMapping(value = "/test/upload")
+    public ResultVO<?> upload(TestVO testVO) throws IOException {
+        String staticPath = ResourceUtils.getURL("classpath:").getPath() + "static";
+        File staticCatalogue = new File(staticPath);
+        if (!staticCatalogue.exists()) {
+            staticCatalogue.mkdir();
+        }
+        File dest = new File(staticPath, testVO.getName());
+        MultipartFile file = testVO.getFile();
+        file.transferTo(dest);
         return ResultVO.ok();
     }
 }
