@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.aurora.mapper.UserAuthMapper">
+<mapper namespace="com.myblog.mapper.UserAuthMapper">
     <resultMap id="UserAdminMap" type="com.myblog.model.dto.UserAdminDTO">
         <id property="id" column="id"/>
         <result property="userInfoId" column="user_info_id"/>
@@ -40,23 +40,22 @@
         is_disable
         FROM
         t_user_info
-        <where>
-            <if test="conditionVO.loginType != null">
-                id in
-                (
-                SELECT
-                user_info_id
-                FROM
-                t_user_auth
-                WHERE
-                login_type = #{conditionVO.loginType}
-                )
-            </if>
-            <if test="conditionVO.keywords != null">
-                and nickname like concat('%',#{conditionVO.keywords},'%')
-            </if>
-        </where>
-        LIMIT #{current},#{size}
+<!--        <where>-->
+<!--            <if test="conditionVO.loginType != null">-->
+<!--                id in-->
+<!--                (-->
+<!--                SELECT-->
+<!--                user_info_id-->
+<!--                FROM-->
+<!--                t_user_auth-->
+<!--                WHERE-->
+<!--                login_type = #{conditionVO.loginType}-->
+<!--                )-->
+<!--            </if>-->
+<!--            <if test="conditionVO.keywords != null">-->
+<!--                and nickname like concat('%',#{conditionVO.keywords},'%')-->
+<!--            </if>-->
+<!--        </where>-->
         ) ui
         LEFT JOIN t_user_auth ua ON ua.user_info_id = ui.id
         LEFT JOIN t_user_role ur ON ui.id = ur.user_id

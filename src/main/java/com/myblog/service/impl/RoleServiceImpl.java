@@ -3,10 +3,7 @@ package com.myblog.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.myblog.entity.Menu;
-import com.myblog.entity.Role;
-import com.myblog.entity.RoleMenu;
-import com.myblog.entity.RoleResource;
+import com.myblog.entity.*;
 import com.myblog.exception.BizException;
 import com.myblog.handler.FilterInvocationSecurityMetadataSourceImpl;
 import com.myblog.mapper.MenuMapper;
@@ -16,9 +13,12 @@ import com.myblog.model.dto.LabelOptionDTO;
 import com.myblog.model.dto.PageResultDTO;
 import com.myblog.model.dto.RoleDTO;
 import com.myblog.model.vo.ConditionVO;
+import com.myblog.model.vo.UserVO;
 import com.myblog.service.RoleMenuService;
 import com.myblog.service.RoleResourceService;
 import com.myblog.service.RoleService;
+import com.myblog.service.UserRoleService;
+import com.myblog.util.BeanCopyUtil;
 import com.myblog.util.PageUtil;
 import com.myblog.util.TreeUtil;
 import lombok.SneakyThrows;
@@ -45,6 +45,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Autowired
     private RoleResourceService roleResourceService;
+
+    @Autowired
+    private UserRoleService userRoleService;
 
     @Autowired
     private FilterInvocationSecurityMetadataSourceImpl filterInvocationSecurityMetadataSource;
@@ -126,6 +129,32 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
             roleResourceService.saveBatch(roleResourceList);
         }
         filterInvocationSecurityMetadataSource.clearDataSource();
+    }
+
+    @Override
+    public List<RoleDTO> listAllowRoles() {
+        LambdaQueryWrapper<Role> lambdaQueryWrapper = new LambdaQueryWrapper<Role>()
+                .eq(Role::getIsDisable, 0);
+        List<Role> roles = roleMapper.selectList(lambdaQueryWrapper);
+        return BeanCopyUtil.copyList(roles, RoleDTO.class);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void updateAllowRoles(UserVO userVO) {
+        userRoleService.remove(new LambdaQueryWrapper<UserRole>()
+                .eq(UserRole::getUserId, userVO.getId()));
+        List<Integer> roleIds = userVO.getRoleIds();
+        if (roleIds != null && roleIds.size() != 0) {
+            List<UserRole> userRoles = roleIds.stream()
+                    .map((id) -> UserRole
+                            .builder()
+                            .userId(userVO.getId())
+                            .roleId(id)
+                            .build())
+                    .collect(Collectors.toList());
+            userRoleService.saveBatch(userRoles);
+        }
     }
 
     private List<Menu> listCatalogs(List<Menu> menus) {

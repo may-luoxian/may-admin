@@ -6,6 +6,7 @@ import com.myblog.model.dto.RoleDTO;
 import com.myblog.model.vo.ConditionVO;
 import com.myblog.model.vo.ResultVO;
 import com.myblog.model.vo.RoleVO;
+import com.myblog.model.vo.UserVO;
 import com.myblog.service.ResourceService;
 import com.myblog.service.RoleService;
 import io.swagger.annotations.Api;
@@ -45,6 +46,19 @@ public class RoleController {
     @PostMapping("/admin/role/resources")
     public ResultVO<?> saveOrUpdateResourceAuth(@RequestBody RoleVO roleVO) {
         roleService.saveOrUpdateResourceAuth(roleVO.getId(), roleVO.getRoleResourceIds());
+        return ResultVO.ok();
+    }
+
+    @ApiOperation(value = "获取可分配角色列表")
+    @GetMapping("/admin/role/allow")
+    public ResultVO<List<RoleDTO>> listAllowRoles() {
+        return ResultVO.ok(roleService.listAllowRoles());
+    }
+
+    @ApiOperation(value = "分配角色")
+    @PutMapping("/admin/role/allow")
+    public ResultVO<?> updateAllowRoles(@RequestBody UserVO userVO) {
+        roleService.updateAllowRoles(userVO);
         return ResultVO.ok();
     }
 }

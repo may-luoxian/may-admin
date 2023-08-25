@@ -1,6 +1,5 @@
 package com.myblog.controller;
 
-import com.myblog.model.dto.LabelOptionDTO;
 import com.myblog.model.dto.MenuDTO;
 import com.myblog.model.dto.UserMenuDTO;
 import com.myblog.model.vo.MenuVO;
