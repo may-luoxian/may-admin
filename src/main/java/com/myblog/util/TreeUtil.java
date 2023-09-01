@@ -9,14 +9,14 @@ import java.util.Map;
 
 public class TreeUtil {
     /**
-     * @param roots        根节点
-     * @param childMap     孩子节点
-     * @param t            实体实例对象
-     * @param propertyName 子节点属性名
+     * @param roots         根节点
+     * @param childMap      孩子节点
+     * @param t             实体实例对象
+     * @param propertyName  子节点属性名
+     * @param isDeleteChild 对于有父节点的，是否删除子节点
      * @param <T>
-     * @throws Exception
      */
-    public static <T> void buildTree(List<T> roots, Map<Integer, List<T>> childMap, T t, String propertyName) {
+    public static <T> void buildTree(List<T> roots, Map<Integer, List<T>> childMap, T t, String propertyName, boolean isDeleteChild) {
         for (T root : roots) {
             Integer id = null;
             try {
@@ -38,11 +38,14 @@ public class TreeUtil {
             f.setAccessible(true);
             try {
                 f.set(root, childList);
+                if (isDeleteChild == true) {
+                    childMap.remove(id);
+                }
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
             if (childList != null && childList.size() > 0) {
-                buildTree(childList, childMap, t, propertyName);
+                buildTree(childList, childMap, t, propertyName, isDeleteChild);
             }
         }
     }

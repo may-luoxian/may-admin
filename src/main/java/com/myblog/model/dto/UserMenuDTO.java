@@ -12,19 +12,19 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserMenuDTO {
-    private Integer id;
+    private String path;
 
     private String name;
 
-    private Number menuType;
+    private Integer id;
 
-    private String path;
+    private Integer menuType;
 
     private String component;
 
     private String icon;
 
-    private Boolean hidden;
+    private Integer isHidden;
 
     private Integer parentId;
 

@@ -2,6 +2,7 @@ package com.myblog.interceptor;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.myblog.util.PageUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 import static com.myblog.constant.CommonConstant.*;
 
+@Slf4j
 @Component
 @SuppressWarnings("all")
 public class PaginationInterceptor implements HandlerInterceptor {

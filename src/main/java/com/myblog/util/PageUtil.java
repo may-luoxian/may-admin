@@ -1,6 +1,7 @@
 package com.myblog.util;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.context.annotation.Bean;
 
 import java.util.Objects;
 
@@ -29,8 +30,8 @@ public class PageUtil {
     }
 
     public static Long getLimitCurrent() {
-        Long test = (getCurrent() - 1) * getSize();
-        return test;
+        Long startRow = (getCurrent() - 1) * getSize();
+        return startRow;
     }
 
     public static void remove() {

@@ -1,23 +1,29 @@
 package com.myblog.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.myblog.entity.Resource;
 import com.myblog.handler.FilterInvocationSecurityMetadataSourceImpl;
 import com.myblog.mapper.ResourceMapper;
 import com.myblog.model.dto.LabelOptionDTO;
+import com.myblog.model.dto.PageResultDTO;
 import com.myblog.model.dto.ResourceDTO;
 import com.myblog.model.vo.ResourceVO;
+import com.myblog.model.vo.ResultVO;
 import com.myblog.service.ResourceService;
 import com.myblog.util.BeanCopyUtil;
+import com.myblog.util.PageUtil;
 import com.myblog.util.TreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+
+import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 @Service
 public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> implements ResourceService {
@@ -48,15 +54,15 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
             childMap.put(id, labelOptionDTOs);
         });
         LabelOptionDTO t = new LabelOptionDTO();
-        TreeUtil.buildTree(rootList, childMap, t, "children");
+        TreeUtil.buildTree(rootList, childMap, t, "children", false);
         return rootList;
     }
 
     @Override
-    public List<ResourceDTO> listResources() {
-        List<Resource> resources = resourceMapper.selectList(null);
-        List<Resource> catalogs = listCatalogs(resources);
-        Map<Integer, List<Resource>> resourceMap = getResourceMap(resources);
+    public List<ResourceDTO> listResources(ResourceVO resourceVO) {
+        List<Resource> resourceList = resourceMapper.selectResource(resourceVO);
+        List<Resource> catalogs = listCatalogs(resourceList);
+        Map<Integer, List<Resource>> resourceMap = getResourceMap(resourceList);
         HashMap<Integer, List<ResourceDTO>> childMap = new HashMap<>();
         resourceMap.forEach((id, item) -> {
             List<ResourceDTO> resourceDTOS = BeanCopyUtil.copyList(item, ResourceDTO.class);
@@ -71,7 +77,12 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
                 })
                 .collect(Collectors.toList());
         ResourceDTO t = new ResourceDTO();
-        TreeUtil.buildTree(rootList, childMap, t, "children");
+        TreeUtil.buildTree(rootList, childMap, t, "children", true);
+        if (CollectionUtils.isNotEmpty(childMap)) {
+            List<ResourceDTO> childrenList = new ArrayList<>();
+            childMap.values().forEach(childrenList::addAll);
+            rootList.addAll(childrenList);
+        }
         return rootList;
     }
 

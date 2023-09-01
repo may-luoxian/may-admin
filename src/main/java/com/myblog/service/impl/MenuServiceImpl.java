@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static com.myblog.constant.CommonConstant.COMPONENT;
 import static com.myblog.constant.CommonConstant.TRUE;
 
 @Service
@@ -43,7 +44,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             childDTOMap.put(id, menuDTOList);
         });
         UserMenuDTO t = new UserMenuDTO();
-        TreeUtil.buildTree(rootList, childDTOMap, t, "children");
+        TreeUtil.buildTree(rootList, childDTOMap, t, "children", false);
         return rootList;
     }
 
@@ -62,7 +63,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             childDTOMap.put(id, menuDTOList);
         });
         MenuDTO t = new MenuDTO();
-        TreeUtil.buildTree(rootList, childDTOMap, t, "children");
+        TreeUtil.buildTree(rootList, childDTOMap, t, "children", false);
         return rootList;
     }
 

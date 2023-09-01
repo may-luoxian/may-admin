@@ -28,4 +28,10 @@ public class ResourceVO {
 
     @ApiModelProperty(name = "isAnonymous", value = "是否匿名", dataType = "Integer")
     private Integer isAnonymous;
+
+    @ApiModelProperty(name = "current", value = "页号", dataType = "Integer")
+    private Long current;
+
+    @ApiModelProperty(name = "size", value = "页数", dataType = "Integer")
+    private Long size;
 }

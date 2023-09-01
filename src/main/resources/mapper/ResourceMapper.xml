@@ -1,4 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.myblog.mapper.ResourceMapper">
+    <resultMap id="resourceMap" type="com.myblog.entity.Resource">
+        <id property="id" column="id"></id>
+        <result property="resourceName" column="resource_name"></result>
+        <result property="url" column="url"></result>
+        <result property="requestMethod" column="request_method"></result>
+        <result property="parentId" column="parent_id"></result>
+        <result property="isAnonymous" column="is_anonymous"></result>
+        <result property="createTime" column="create_time"></result>
+        <result property="updateTime" column="update_time"></result>
+    </resultMap>
+    <select id="selectResource" resultMap="resourceMap">
+        SELECT id,
+        resource_name,
+        url,
+        request_method,
+        parent_id,
+        is_anonymous,
+        create_time,
+        update_time
+        FROM my_blog.t_resource
+        <where>
+            <if test="resourceVO.resourceName != null and resourceVO.resourceName != ''">
+                resource_name LIKE CONCAT('%', #{resourceVO.resourceName}, '%')
+            </if>
+            <if test="resourceVO.requestMethod != null and resourceVO.requestMethod != ''">
+                AND request_method LIKE CONCAT('%', #{resourceVO.requestMethod}, '%')
+            </if>
+            <if test="resourceVO.isAnonymous != null and resourceVO.isAnonymous != ''">
+                AND is_anonymous = #{resourceVO.isAnonymous}
+            </if>
+        </where>
+    </select>
 </mapper>

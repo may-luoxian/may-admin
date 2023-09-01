@@ -1,6 +1,7 @@
 package com.myblog.controller;
 
 import com.myblog.model.dto.LabelOptionDTO;
+import com.myblog.model.dto.PageResultDTO;
 import com.myblog.model.dto.ResourceDTO;
 import com.myblog.model.vo.ResourceVO;
 import com.myblog.model.vo.ResultVO;
@@ -24,8 +25,8 @@ public class ResourceController {
 
     @ApiOperation(value = "获取资源列表")
     @GetMapping("/admin/resources")
-    public ResultVO<List<ResourceDTO>> listResources() {
-        return ResultVO.ok(resourceService.listResources());
+    public ResultVO<List<ResourceDTO>> listResources(ResourceVO resourceVO) {
+        return ResultVO.ok(resourceService.listResources(resourceVO));
     }
 
     @ApiOperation(value = "获取角色资源列表")
