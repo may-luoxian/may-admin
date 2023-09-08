@@ -28,4 +28,9 @@ public class RedisServiceImpl implements RedisService {
     public Object hGet(String key, String hashKey) {
         return redisTemplate.opsForHash().get(key, hashKey);
     }
+
+    @Override
+    public void hDel(String key, Object... hashKey) {
+        redisTemplate.opsForHash().delete(key, hashKey);
+    }
 }

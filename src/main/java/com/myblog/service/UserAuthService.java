@@ -10,4 +10,6 @@ import java.util.List;
 
 public interface UserAuthService extends IService<UserAuth> {
     List<UserAdminDTO> listUsers(ConditionVO conditionVO);
+
+    void logout(Integer id);
 }
