@@ -1,12 +1,10 @@
 package com.myblog.controller;
 
-import com.myblog.model.dto.ArticleCardDTO;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.UUID;
 import java.util.concurrent.Executors;
@@ -35,15 +33,4 @@ public class SseWebMvcController {
         }, 0, 1, TimeUnit.SECONDS);
         return sseEmitter;
     }
-
-//    public void sendEvents() {
-//        try {
-//            sseEmitter.send("Alpha");
-//            sseEmitter.send("Omega");
-//
-//            sseEmitter.complete();
-//        } catch (Exception e) {
-//            sseEmitter.completeWithError(e);
-//        }
-//    }
 }
