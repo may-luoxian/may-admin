@@ -38,7 +38,7 @@ public class AuthenticationSuccessHandlerImpl implements AuthenticationSuccessHa
         // 构建用户登录响应数据
         UserInfoDTO userLoginDTO = BeanCopyUtil.copyObject(UserUtil.getUserDetailsDTO(), UserInfoDTO.class);
         if(Objects.nonNull(userLoginDTO)) {
-            //保存用户信息生成token
+            // 保存用户信息生成token
             UserDetailsDTO userDetailsDTO = (UserDetailsDTO) authentication.getPrincipal();
             String token = tokenService.createToken(userDetailsDTO);
             userLoginDTO.setToken(token);

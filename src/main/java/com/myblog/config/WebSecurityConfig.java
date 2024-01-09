@@ -1,6 +1,7 @@
 package com.myblog.config;
 
 import com.myblog.filter.JwtAuthenticationTokenFilter;
+import com.myblog.filter.RepeatLoginFilter;
 import com.myblog.handler.AccessDecisionManagerImpl;
 import com.myblog.handler.FilterInvocationSecurityMetadataSourceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,14 +36,19 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     private AuthenticationFailureHandler authenticationFailureHandler;
     @Autowired
     private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+    @Autowired
+    private RepeatLoginFilter repeatLoginFilter;
+
     @Bean
     public FilterInvocationSecurityMetadataSource securityMetadataSource() {
         return new FilterInvocationSecurityMetadataSourceImpl();
     }
+
     @Bean
     public AccessDecisionManager accessDecisionManager() {
         return new AccessDecisionManagerImpl();
     }
+
     //密码编码器
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -73,6 +79,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         // 前置拦截器，当收到请求时，进行处理
-        http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(repeatLoginFilter, JwtAuthenticationTokenFilter.class);
     }
 }

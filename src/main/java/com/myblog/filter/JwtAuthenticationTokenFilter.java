@@ -34,6 +34,7 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
         if (Objects.nonNull(userDetailsDTO) && Objects.isNull(UserUtil.getAuthentication())) {
             // 更新redis中存储用户信息的过期时间
             tokenService.renewToken(userDetailsDTO);
+            // 设置用户权限
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetailsDTO, null, userDetailsDTO.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authenticationToken);
         }

@@ -10,6 +10,8 @@ public enum StatusCodeEnum {
 
     NO_LOGIN(40001, "用户未登录"),
 
+    REPEAT_LOGIN(40002, "重复登录"),
+
     AUTHORIZED(40300, "没有操作权限"),
 
     SYSTEM_ERROR(50000, "系统异常"),

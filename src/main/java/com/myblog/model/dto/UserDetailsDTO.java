@@ -57,6 +57,8 @@ public class UserDetailsDTO implements UserDetails {
 
     private String os;
 
+    private String token;
+
     //@JsonDeserialize @JsonSerialize 序列化，反序列化
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
     @JsonSerialize(using = LocalDateTimeSerializer.class)

@@ -22,6 +22,8 @@ public interface RedisConstant {
 
     String LOGIN_USER = "login_user";
 
+    String LOGIN_TOKEN = "login_token";
+
     String ARTICLE_ACCESS = "article_access:";
 
 }

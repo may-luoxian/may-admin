@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.Date;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,17 +33,20 @@ public class TokenServiceImpl implements TokenService {
      */
     @Override
     public String createToken(UserDetailsDTO userDetailsDTO) {
-        refreshToken(userDetailsDTO);
         String userId = userDetailsDTO.getId().toString();
-        return createToken(userId);
+        String token = createToken(userId);
+        userDetailsDTO.setToken(token);
+        refreshToken(userDetailsDTO);
+        return token;
     }
 
     @Override
     public String createToken(String subject) {
         SignatureAlgorithm signatureAlgorithm = SignatureAlgorithm.HS256;
         SecretKey secretKey = generalKey();
+        Date date = new Date();
         return Jwts.builder().setId(getUuid()).setSubject(subject)
-                .setIssuer("huaweimian")
+                .setIssuer("sunyukun").setIssuedAt(date)
                 .signWith(signatureAlgorithm, secretKey).compact();
     }
 
