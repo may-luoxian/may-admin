@@ -18,6 +18,8 @@ public class RoleDTO {
 
     private String roleName;
 
+    private String describe;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime createTime;
 

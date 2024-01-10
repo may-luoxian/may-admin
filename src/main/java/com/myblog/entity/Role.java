@@ -18,6 +18,8 @@ public class Role {
     private Integer id;
     private String roleName;
     private Integer isDisable;
+    @TableField("`describe`")
+    private String describe;
     @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
     @TableField(fill = FieldFill.UPDATE)

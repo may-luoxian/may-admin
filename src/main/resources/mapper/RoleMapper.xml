@@ -5,6 +5,7 @@
         <id property="id" column="id"></id>
         <result property="roleName" column="role_name"></result>
         <result property="createTime" column="create_time"></result>
+        <result property="describe" column="describe"></result>
         <result property="isDisable" column="is_disable"></result>
         <collection property="resourceIds" ofType="java.lang.Integer">
             <constructor>
@@ -45,8 +46,8 @@
         WHERE ur.user_id = #{userInfoId}
     </select>
     <select id="listRoles" resultMap="roleMap">
-        SELECT r.id, r.role_name, r.create_time, r.is_disable, rr.resource_id, rm.menu_id
-        FROM (SELECT id, role_name, is_disable, create_time
+        SELECT r.id, r.role_name, r.describe, r.create_time, r.is_disable, rr.resource_id, rm.menu_id
+        FROM (SELECT id, role_name, is_disable, `describe`, create_time
         FROM t_role
         <where>
             <if test="conditionVO.keywords != null">

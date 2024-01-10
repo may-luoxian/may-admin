@@ -13,6 +13,7 @@ import com.myblog.model.dto.LabelOptionDTO;
 import com.myblog.model.dto.PageResultDTO;
 import com.myblog.model.dto.RoleDTO;
 import com.myblog.model.vo.ConditionVO;
+import com.myblog.model.vo.RoleVO;
 import com.myblog.model.vo.UserVO;
 import com.myblog.service.RoleMenuService;
 import com.myblog.service.RoleResourceService;
@@ -156,6 +157,23 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                     .collect(Collectors.toList());
             userRoleService.saveBatch(userRoles);
         }
+    }
+
+    @Override
+    public void saveOrUpdateRole(RoleVO roleVO) {
+        Role roleCheck = roleMapper.selectOne(new LambdaQueryWrapper<Role>()
+                .select(Role::getId, Role::getRoleName)
+                .eq(Role::getRoleName, roleVO.getRoleName()));
+        if (Objects.nonNull(roleCheck) && !(roleCheck.getId().equals(roleVO.getId()))) {
+            throw new BizException("该角色已存在");
+        }
+        Role role = Role.builder()
+                .id(roleVO.getId())
+                .roleName(roleVO.getRoleName())
+                .isDisable(roleVO.getIsDisable())
+                .describe(roleVO.getDescribe())
+                .build();
+        this.saveOrUpdate(role);
     }
 
     private List<Menu> listCatalogs(List<Menu> menus) {

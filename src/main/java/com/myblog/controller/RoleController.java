@@ -14,6 +14,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @Api(tags = "角色模块")
@@ -59,6 +60,13 @@ public class RoleController {
     @PutMapping("/admin/role/allow")
     public ResultVO<?> updateAllowRoles(@RequestBody UserVO userVO) {
         roleService.updateAllowRoles(userVO);
+        return ResultVO.ok();
+    }
+
+    @ApiOperation(value = "新增或修改角色")
+    @PostMapping("/admin/roles")
+    public ResultVO<?> saveOrUpdateRole(@RequestBody @Valid RoleVO roleVO) {
+        roleService.saveOrUpdateRole(roleVO);
         return ResultVO.ok();
     }
 }
