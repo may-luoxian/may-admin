@@ -4,9 +4,12 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.myblog.entity.UserAuth;
 import com.myblog.mapper.UserAuthMapper;
 import com.myblog.model.dto.UserAdminDTO;
+import com.myblog.model.dto.UserInfoDTO;
 import com.myblog.model.vo.ConditionVO;
 import com.myblog.service.RedisService;
 import com.myblog.service.UserAuthService;
+import com.myblog.util.BeanCopyUtil;
+import com.myblog.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +29,12 @@ public class UserAuthServiceImpl extends ServiceImpl<UserAuthMapper, UserAuth> i
     @Override
     public List<UserAdminDTO> listUsers(ConditionVO conditionVO) {
         return userAuthMapper.listUsers(conditionVO);
+    }
+
+    @Override
+    public UserInfoDTO userInfo() {
+        UserInfoDTO userInfoDTO = BeanCopyUtil.copyObject(UserUtil.getUserDetailsDTO(), UserInfoDTO.class);
+        return userInfoDTO;
     }
 
     @Override
