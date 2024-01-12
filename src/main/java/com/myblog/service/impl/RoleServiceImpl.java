@@ -6,9 +6,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.myblog.entity.*;
 import com.myblog.exception.BizException;
 import com.myblog.handler.FilterInvocationSecurityMetadataSourceImpl;
-import com.myblog.mapper.MenuMapper;
-import com.myblog.mapper.RoleMapper;
-import com.myblog.mapper.RoleMenuMapper;
+import com.myblog.mapper.*;
 import com.myblog.model.dto.LabelOptionDTO;
 import com.myblog.model.dto.PageResultDTO;
 import com.myblog.model.dto.RoleDTO;
@@ -50,7 +48,12 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
     @Autowired
     private UserRoleService userRoleService;
-
+    @Autowired
+    private UserRoleMapper userRoleMapper;
+    @Autowired
+    private RoleResourceMapper roleResourceMapper;
+    @Autowired
+    private RoleMenuMapper roleMenuMapper;
     @Autowired
     private FilterInvocationSecurityMetadataSourceImpl filterInvocationSecurityMetadataSource;
 
@@ -174,6 +177,19 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
                 .describe(roleVO.getDescribe())
                 .build();
         this.saveOrUpdate(role);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void deleteRoles(List<Integer> ids) {
+        Integer count = userRoleMapper.selectCount(new LambdaQueryWrapper<UserRole>()
+                .in(UserRole::getRoleId, ids));
+        if (count > 0) {
+            throw new BizException("所选角色中有角色已经绑定了用户");
+        }
+        roleResourceMapper.batchDeleteByRoleids(ids);
+        roleMenuMapper.batchDeleteByRoleids(ids);
+        roleMapper.deleteBatchIds(ids);
     }
 
     private List<Menu> listCatalogs(List<Menu> menus) {

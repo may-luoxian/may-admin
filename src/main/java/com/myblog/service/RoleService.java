@@ -19,4 +19,5 @@ public interface RoleService extends IService<Role> {
     List<RoleDTO> listAllowRoles();
     void updateAllowRoles(UserVO userVO);
     void saveOrUpdateRole(RoleVO roleVO);
+    void deleteRoles(List<Integer> ids);
 }

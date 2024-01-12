@@ -74,6 +74,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         this.saveOrUpdate(menu);
     }
 
+    @Override
+    public void deleteMenu(List<Integer> ids) {
+//        menuMapper.
+    }
+
     private List<Menu> listCatalogs(List<Menu> menus) {
         return menus.stream()
                 .filter(item -> Objects.isNull(item.getParentId()))

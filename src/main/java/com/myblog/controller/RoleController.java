@@ -19,54 +19,62 @@ import java.util.List;
 
 @Api(tags = "角色模块")
 @RestController
+@RequestMapping("/admin/role")
 public class RoleController {
 
     @Autowired
     private RoleService roleService;
 
     @ApiOperation(value = "查询角色列表")
-    @GetMapping("/admin/roles")
+    @GetMapping("/roles")
     public ResultVO<PageResultDTO<RoleDTO>> listRoles(ConditionVO conditionVO) {
         return ResultVO.ok(roleService.listRoles(conditionVO));
     }
 
+    @ApiOperation(value = "新增或修改角色")
+    @PostMapping("/roles")
+    public ResultVO<?> saveOrUpdateRole(@RequestBody @Valid RoleVO roleVO) {
+        roleService.saveOrUpdateRole(roleVO);
+        return ResultVO.ok();
+    }
+
+    @ApiOperation(value = "删除角色")
+    @DeleteMapping("/roles")
+    public ResultVO<?> deleteRoles(@RequestBody List<Integer> ids) {
+        roleService.deleteRoles(ids);
+        return ResultVO.ok();
+    }
+
     @ApiOperation(value = "查询角色菜单")
-    @GetMapping("/admin/role/menus")
+    @GetMapping("/menus")
     public ResultVO<List<LabelOptionDTO>> listRoleMenus() {
         return ResultVO.ok(roleService.listRoleMenus());
     }
 
     @ApiOperation(value = "新增或修改角色菜单权限")
-    @PostMapping("/admin/role/menus")
+    @PostMapping("/menus")
     public ResultVO<?> saveOrUpdateMenuAuth(@RequestBody RoleVO roleVO) {
         roleService.saveOrUpdateMenuAuth(roleVO.getId(), roleVO.getRoleMenuIds());
         return ResultVO.ok();
     }
 
     @ApiOperation(value = "新增或修改角色资源权限")
-    @PostMapping("/admin/role/resources")
+    @PostMapping("/resources")
     public ResultVO<?> saveOrUpdateResourceAuth(@RequestBody RoleVO roleVO) {
         roleService.saveOrUpdateResourceAuth(roleVO.getId(), roleVO.getRoleResourceIds());
         return ResultVO.ok();
     }
 
     @ApiOperation(value = "获取可分配角色列表")
-    @GetMapping("/admin/role/allow")
+    @GetMapping("/allow")
     public ResultVO<List<RoleDTO>> listAllowRoles() {
         return ResultVO.ok(roleService.listAllowRoles());
     }
 
     @ApiOperation(value = "分配角色")
-    @PutMapping("/admin/role/allow")
+    @PutMapping("/allow")
     public ResultVO<?> updateAllowRoles(@RequestBody UserVO userVO) {
         roleService.updateAllowRoles(userVO);
-        return ResultVO.ok();
-    }
-
-    @ApiOperation(value = "新增或修改角色")
-    @PostMapping("/admin/roles")
-    public ResultVO<?> saveOrUpdateRole(@RequestBody @Valid RoleVO roleVO) {
-        roleService.saveOrUpdateRole(roleVO);
         return ResultVO.ok();
     }
 }

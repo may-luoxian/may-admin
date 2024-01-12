@@ -18,4 +18,7 @@ public interface MenuService extends IService<Menu> {
 
     // 新增或修改菜单
     void saveOrUpdateMenu(MenuVO menuVO);
+
+    // 删除菜单
+    void deleteMenu(List<Integer> ids);
 }

@@ -37,4 +37,11 @@ public class MenuController {
     public ResultVO<List<MenuDTO>> listMenus() {
         return ResultVO.ok(menuService.listMenus());
     }
+
+    @ApiOperation("删除系统路由")
+    @DeleteMapping("/admin/menus/menu")
+    public ResultVO<?> deleteMenu(@RequestBody List<Integer> ids) {
+        menuService.deleteMenu(ids);
+        return ResultVO.ok();
+    }
 }
