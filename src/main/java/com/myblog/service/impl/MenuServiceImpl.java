@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.myblog.entity.Menu;
+import com.myblog.mapper.RoleMenuMapper;
 import com.myblog.model.dto.LabelOptionDTO;
 import com.myblog.model.dto.MenuDTO;
 import com.myblog.model.dto.UserMenuDTO;
@@ -27,6 +28,8 @@ import static com.myblog.constant.CommonConstant.TRUE;
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
     @Autowired
     private MenuMapper menuMapper;
+    @Autowired
+    private RoleMenuMapper roleMenuMapper;
 
     //获取用户菜单
     @Override
@@ -74,9 +77,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         this.saveOrUpdate(menu);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void deleteMenu(List<Integer> ids) {
-//        menuMapper.
+        roleMenuMapper.batchDeleteByMenuIds(ids);
+        menuMapper.deleteBatchIds(ids);
     }
 
     private List<Menu> listCatalogs(List<Menu> menus) {

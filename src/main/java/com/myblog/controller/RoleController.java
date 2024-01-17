@@ -1,5 +1,7 @@
 package com.myblog.controller;
 
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.myblog.exception.BizException;
 import com.myblog.model.dto.LabelOptionDTO;
 import com.myblog.model.dto.PageResultDTO;
 import com.myblog.model.dto.RoleDTO;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Map;
 
 @Api(tags = "角色模块")
 @RestController
@@ -24,6 +27,8 @@ public class RoleController {
 
     @Autowired
     private RoleService roleService;
+    @Autowired
+    private ResourceService resourceService;
 
     @ApiOperation(value = "查询角色列表")
     @GetMapping("/roles")
@@ -40,9 +45,13 @@ public class RoleController {
 
     @ApiOperation(value = "删除角色")
     @DeleteMapping("/roles")
-    public ResultVO<?> deleteRoles(@RequestBody List<Integer> ids) {
-        roleService.deleteRoles(ids);
-        return ResultVO.ok();
+    public ResultVO<Object> deleteRoles(@RequestBody Map map) {
+        List<Integer> ids = (List<Integer>) map.get("ids");
+        if (ids != null && ids.size() != 0) {
+            roleService.deleteRoles(ids);
+            return ResultVO.ok();
+        }
+        return ResultVO.fail("未选择角色");
     }
 
     @ApiOperation(value = "查询角色菜单")
@@ -76,5 +85,11 @@ public class RoleController {
     public ResultVO<?> updateAllowRoles(@RequestBody UserVO userVO) {
         roleService.updateAllowRoles(userVO);
         return ResultVO.ok();
+    }
+
+    @ApiOperation(value = "获取角色资源列表")
+    @GetMapping("/resources")
+    public ResultVO<List<LabelOptionDTO>> listRoleResources() {
+        return ResultVO.ok(resourceService.listRoleResources());
     }
 }

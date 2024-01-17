@@ -7,4 +7,10 @@
             #{id}
         </foreach>
     </delete>
+    <delete id="batchDeleteByMenuIds">
+        DELETE FROM t_role_menu WHERE menu_id in
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>

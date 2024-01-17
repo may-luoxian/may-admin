@@ -14,16 +14,16 @@
         <result property="updateTime" column="update_time"></result>
     </resultMap>
     <select id="listTopAndFeaturedArticles" resultMap="ArticleCardDTOResultMap">
-        SELECT a.id                            AS id,--
+        SELECT a.id AS id,
                article_cover,
                article_title,
                SUBSTR(article_content, 1, 500) AS article_content,
                is_top,
                is_featured,
                status,
-               c.category_name                 AS category_name,
-               a.create_time                   AS create_time,
-               a.update_time                   AS update_time
+               c.category_name AS category_name,
+               a.create_time AS create_time,
+               a.update_time AS update_time
         FROM (SELECT id,
                      article_cover,
                      article_title,
@@ -41,6 +41,6 @@
                            ON a.category_id = c.id
         WHERE a.status = 1
           AND a.is_delete = 0
-        ORDER BY a.is_top desc, a.is_featured desc;
+        ORDER BY a.is_top DESC, a.is_featured DESC;
     </select>
 </mapper>

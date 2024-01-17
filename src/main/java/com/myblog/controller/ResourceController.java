@@ -6,39 +6,40 @@ import com.myblog.model.dto.ResourceDTO;
 import com.myblog.model.vo.ResourceVO;
 import com.myblog.model.vo.ResultVO;
 import com.myblog.service.ResourceService;
+import com.myblog.service.RoleResourceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Api(tags = "资源模块")
 @RestController
+@RequestMapping("/admin/resource")
 public class ResourceController {
 
     @Autowired
     private ResourceService resourceService;
 
     @ApiOperation(value = "获取资源列表")
-    @GetMapping("/admin/resources")
+        @GetMapping("/resources")
     public ResultVO<List<ResourceDTO>> listResources(ResourceVO resourceVO) {
         return ResultVO.ok(resourceService.listResources(resourceVO));
     }
 
-    @ApiOperation(value = "获取角色资源列表")
-    @GetMapping("/admin/role/resources")
-    public ResultVO<List<LabelOptionDTO>> listRoleResources() {
-        return ResultVO.ok(resourceService.listRoleResources());
-    }
-
     @ApiOperation(value = "新增或修改资源")
-    @PostMapping("/admin/resource")
+    @PostMapping("/resources")
     public ResultVO<?> saveOrUpdateResource(@RequestBody ResourceVO resourceVO) {
         resourceService.saveOrUpdateResource(resourceVO);
+        return ResultVO.ok();
+    }
+
+    @ApiOperation(value = "删除资源")
+    @DeleteMapping("/resources")
+    public ResultVO<?> deleteResources(@RequestBody List<Integer> ids) {
+        resourceService.deleteResources(ids);
         return ResultVO.ok();
     }
 }

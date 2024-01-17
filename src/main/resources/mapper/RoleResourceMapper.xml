@@ -7,4 +7,10 @@
             #{id}
         </foreach>
     </delete>
+    <delete id="batchDeleteByResourceIds">
+        DELETE FROM t_role_resource WHERE resource_id IN
+        <foreach collection="ids" open="(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+    </delete>
 </mapper>
