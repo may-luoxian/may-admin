@@ -1,6 +1,7 @@
 package com.myblog.controller;
 
 import com.myblog.model.dto.UserAdminDTO;
+import com.myblog.model.dto.UserDetailsDTO;
 import com.myblog.model.dto.UserInfoDTO;
 import com.myblog.model.vo.ConditionVO;
 import com.myblog.model.vo.ResultVO;
@@ -8,10 +9,8 @@ import com.myblog.service.UserAuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -19,7 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/users")
 public class UserAuthController {
-
     @Autowired
     private UserAuthService userAuthService;
 
@@ -33,6 +31,20 @@ public class UserAuthController {
     @GetMapping("/info")
     public ResultVO<UserInfoDTO> getUserInfo() {
         return ResultVO.ok(userAuthService.userInfo());
+    }
+
+    @ApiOperation("上传头像")
+    @PostMapping("/avatar")
+    public ResultVO<?> uploadAvatar(MultipartFile file) {
+        String path = userAuthService.uploadAvatar(file);
+        return ResultVO.ok(path);
+    }
+
+    @ApiOperation("创建用户")
+    @PostMapping("/user")
+    public ResultVO<?> createUser(UserDetailsDTO userDetailsDTO) {
+        UserDetailsDTO userDetailsDTO1 = userDetailsDTO;
+        return ResultVO.ok();
     }
 
     @ApiOperation("退出登录")

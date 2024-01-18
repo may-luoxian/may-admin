@@ -89,11 +89,11 @@ upload:
     accessKeySecret: OSS??accessKeySecret
     bucketName: OSS??bucketName
   minio:
-    url: http://127.0.0.1:9000/aurora/
+    url: http://127.0.0.1:9000/may-blog/
     endpoint: http://127.0.0.1:9000
-    accesskey: hA7iO3yqJXYY2Hfs
-    secretKey: l7jzH35PDbO2sEzXSNZeGmCANO9SZD9S
-    bucketName: aurora
+    accesskey: BDQJwDl5yBnW2jvXswqS
+    secretKey: pGrLCpZRumyY00BWX5TOTGGdPctaKhPXMvQBau5W
+    bucketName: may-blog
 
 #website:
 #  url: https://????

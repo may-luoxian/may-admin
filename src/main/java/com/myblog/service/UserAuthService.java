@@ -6,6 +6,7 @@ import com.myblog.model.dto.UserAdminDTO;
 import com.myblog.model.dto.UserInfoDTO;
 import com.myblog.model.vo.ConditionVO;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -15,4 +16,6 @@ public interface UserAuthService extends IService<UserAuth> {
     UserInfoDTO userInfo();
 
     void logout(Integer id);
+
+    String uploadAvatar(MultipartFile file);
 }
