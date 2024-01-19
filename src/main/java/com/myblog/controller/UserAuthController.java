@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @Api(tags = "用户账号模块")
 @RestController
@@ -42,8 +43,15 @@ public class UserAuthController {
 
     @ApiOperation("创建用户")
     @PostMapping("/user")
-    public ResultVO<?> createUser(UserDetailsDTO userDetailsDTO) {
-        UserDetailsDTO userDetailsDTO1 = userDetailsDTO;
+    public ResultVO<?> createUser(@RequestBody UserDetailsDTO userDetailsDTO) {
+        userAuthService.createUser(userDetailsDTO);
+        return ResultVO.ok();
+    }
+
+    @ApiOperation("删除用户")
+    @DeleteMapping("/user")
+    public ResultVO<?> deleteUser(@RequestBody Map map) {
+        userAuthService.deleteUser((Integer) map.get("id"));
         return ResultVO.ok();
     }
 

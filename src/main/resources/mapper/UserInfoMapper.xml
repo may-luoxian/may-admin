@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.myblog.mapper.UserInfoMapper">
+    <insert id="insertUserInfo" keyProperty="id" useGeneratedKeys="true">
+        INSERT INTO t_user_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="email != null and email != ''">
+                email,
+            </if>
+            <if test="nickname != null and nickname != ''">
+                nickname,
+            </if>
+            <if test="avatar != null and avatar != ''">
+                avatar,
+            </if>
+            <if test="intro != null and intro != ''">
+                intro,
+            </if>
+            <if test="website != null and website != ''">
+                website,
+            </if>
+            <if test="isSubscribe != null and isSubscribe != ''">
+                is_subscribe,
+            </if>
+            <if test="isDisable != null and isDisable != ''">
+                is_disable,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="email != null and email != ''">
+                #{email},
+            </if>
+            <if test="nickname != null and nickname != ''">
+                #{nickname},
+            </if>
+            <if test="avatar != null and avatar != ''">
+                #{avatar},
+            </if>
+            <if test="intro != null and intro != ''">
+                #{intro},
+            </if>
+            <if test="website != null and website != ''">
+                #{website},
+            </if>
+            <if test="isSubscribe != null and isSubscribe != ''">
+                #{isSubscribe},
+            </if>
+            <if test="isDisable != null and isDisable != ''">
+                #{isDisable},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+        </trim>
+    </insert>
+</mapper>
