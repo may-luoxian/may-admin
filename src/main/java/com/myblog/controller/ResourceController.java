@@ -24,7 +24,7 @@ public class ResourceController {
     private ResourceService resourceService;
 
     @ApiOperation(value = "获取资源列表")
-        @GetMapping("/resources")
+    @GetMapping("/resources")
     public ResultVO<List<ResourceDTO>> listResources(ResourceVO resourceVO) {
         return ResultVO.ok(resourceService.listResources(resourceVO));
     }
