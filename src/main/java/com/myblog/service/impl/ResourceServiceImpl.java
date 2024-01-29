@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.myblog.entity.Resource;
 import com.myblog.handler.FilterInvocationSecurityMetadataSourceImpl;
 import com.myblog.mapper.ResourceMapper;
+import com.myblog.mapper.RoleResourceMapper;
 import com.myblog.model.dto.LabelOptionDTO;
 import com.myblog.model.dto.PageResultDTO;
 import com.myblog.model.dto.ResourceDTO;
@@ -18,6 +19,7 @@ import com.myblog.util.PageUtil;
 import com.myblog.util.TreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.concurrent.CompletableFuture;
@@ -32,6 +34,8 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
     private FilterInvocationSecurityMetadataSourceImpl filterInvocationSecurityMetadataSource;
     @Autowired
     private ResourceMapper resourceMapper;
+    @Autowired
+    private RoleResourceMapper roleResourceMapper;
 
     @Override
     public List<LabelOptionDTO> listRoleResources() {
@@ -91,6 +95,13 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
         Resource resource = BeanCopyUtil.copyObject(resourceVO, Resource.class);
         this.saveOrUpdate(resource);
         filterInvocationSecurityMetadataSource.clearDataSource();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void deleteResources(List<Integer> ids) {
+        roleResourceMapper.batchDeleteByResourceIds(ids);
+        resourceMapper.deleteBatchIds(ids);
     }
 
     public List<Resource> listCatalogs(List<Resource> resources) {

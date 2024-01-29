@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface RoleMenuMapper extends BaseMapper<RoleMenu> {
     long batchDeleteByRoleids(@Param("ids") List<Integer> ids);
+
+    long batchDeleteByMenuIds(@Param("ids") List<Integer> ids);
 }

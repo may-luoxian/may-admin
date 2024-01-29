@@ -16,4 +16,5 @@ public interface ResourceService extends IService<Resource> {
     List<ResourceDTO> listResources(ResourceVO resourceVO);
 
     void saveOrUpdateResource(ResourceVO resourceVO);
+    void deleteResources(List<Integer> ids);
 }

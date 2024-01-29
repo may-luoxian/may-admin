@@ -21,21 +21,21 @@ public class Knife4jConfig {
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .protocols(Collections.singleton("https"))
-                .host("https://www.linhaojun.top")
+//                .protocols(Collections.singleton("https"))
+//                .host("https://www.linhaojun.top")
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.aurora.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.myblog.controller"))
                 .paths(PathSelectors.any())
                 .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("aurora文档")
+                .title("may-blog文档")
                 .description("aurora")
-                .contact(new Contact("花未眠", "", "1909925152@qq.com"))
-                .termsOfServiceUrl("https://www.linhaojun.top/api")
+                .contact(new Contact("一只洛仙哟", "", "2876053639@qq.com"))
+                .termsOfServiceUrl("http://localhost:8080/")
                 .version("1.0")
                 .build();
     }

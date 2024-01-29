@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface RoleResourceMapper extends BaseMapper<RoleResource> {
     long batchDeleteByRoleids(@Param("ids") List<Integer> ids);
+
+    long batchDeleteByResourceIds(@Param("ids") List<Integer> ids);
 }
