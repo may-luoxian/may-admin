@@ -15,31 +15,32 @@ import java.util.List;
 
 @Api(tags = "菜单模块")
 @RestController
+@RequestMapping("/admin/menus")
 public class MenuController {
     @Autowired
     private MenuService menuService;
 
     @ApiOperation("获取当前用户路由")
-    @GetMapping("/admin/user/menus")
+    @GetMapping("/user")
     public ResultVO<List<UserMenuDTO>> listUserMenus() {
         return ResultVO.ok(menuService.listUserMenus());
     }
 
     @ApiOperation("新增或修改菜单")
-    @PostMapping("/admin/menus")
+    @PostMapping("/menu")
     public ResultVO<?> saveOrUpdateMenu(@Valid @RequestBody MenuVO menuVO) {
         menuService.saveOrUpdateMenu(menuVO);
         return ResultVO.ok();
     }
 
     @ApiOperation("查询系统路由")
-    @GetMapping("/admin/menus")
+    @GetMapping("/menu")
     public ResultVO<List<MenuDTO>> listMenus() {
         return ResultVO.ok(menuService.listMenus());
     }
 
     @ApiOperation("删除系统路由")
-    @DeleteMapping("/admin/menus/menu")
+    @DeleteMapping("/menu")
     public ResultVO<?> deleteMenu(@RequestBody List<Integer> ids) {
         menuService.deleteMenu(ids);
         return ResultVO.ok();
