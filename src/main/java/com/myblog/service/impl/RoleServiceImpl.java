@@ -11,6 +11,7 @@ import com.myblog.model.dto.LabelOptionDTO;
 import com.myblog.model.dto.PageResultDTO;
 import com.myblog.model.dto.RoleDTO;
 import com.myblog.model.vo.ConditionVO;
+import com.myblog.model.vo.MenuVO;
 import com.myblog.model.vo.RoleVO;
 import com.myblog.model.vo.UserVO;
 import com.myblog.service.RoleMenuService;
@@ -68,33 +69,43 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     }
 
     @Override
-    public List<LabelOptionDTO> listRoleMenus() {
-        List<Menu> menus = menuMapper.selectList(null);
-        List<Menu> catalogs = listCatalogs(menus);
-        Map<Integer, List<Menu>> childrenMap = getMenuMap(menus);
-        HashMap<Integer, List<LabelOptionDTO>> labelOptionDTOListHashMap = new HashMap<>();
-        childrenMap.forEach((id, menuList) -> {
-            labelOptionDTOListHashMap.put(id, menuList.stream()
-                    .map((item) -> LabelOptionDTO.builder()
+    public List<LabelOptionDTO> listRoleMenus(MenuVO menuVO) {
+        LambdaQueryWrapper<Menu> wrapper = new LambdaQueryWrapper<Menu>().like(StringUtils.isNotBlank(menuVO.getName()), Menu::getName, menuVO.getName());
+        List<Menu> menus = menuMapper.selectList(wrapper);
+        if (StringUtils.isBlank(menuVO.getName())) {
+            List<Menu> catalogs = listCatalogs(menus);
+            Map<Integer, List<Menu>> childrenMap = getMenuMap(menus);
+            HashMap<Integer, List<LabelOptionDTO>> labelOptionDTOListHashMap = new HashMap<>();
+            childrenMap.forEach((id, menuList) -> {
+                labelOptionDTOListHashMap.put(id, menuList.stream()
+                        .map((item) -> LabelOptionDTO.builder()
+                                .id(item.getId())
+                                .label(item.getName())
+                                .icon(item.getIcon())
+                                .orderNum(item.getOrderNum())
+                                .build())
+                        .collect(Collectors.toList()));
+            });
+            List<LabelOptionDTO> rootList = catalogs.stream()
+                    .map(item -> LabelOptionDTO.builder()
                             .id(item.getId())
                             .label(item.getName())
                             .icon(item.getIcon())
                             .orderNum(item.getOrderNum())
                             .build())
-                    .collect(Collectors.toList()));
-        });
-        List<LabelOptionDTO> rootList = catalogs.stream()
-                .map(item -> LabelOptionDTO.builder()
-                        .id(item.getId())
-                        .label(item.getName())
-                        .icon(item.getIcon())
-                        .orderNum(item.getOrderNum())
-                        .build())
-                .sorted(Comparator.comparing(LabelOptionDTO::getOrderNum))
-                .collect(Collectors.toList());
-        LabelOptionDTO t = new LabelOptionDTO();
-        TreeUtil.buildTree(rootList, labelOptionDTOListHashMap, t, "children", false);
-        return rootList;
+                    .sorted(Comparator.comparing(LabelOptionDTO::getOrderNum))
+                    .collect(Collectors.toList());
+            LabelOptionDTO t = new LabelOptionDTO();
+            TreeUtil.buildTree(rootList, labelOptionDTOListHashMap, t, "children", false);
+            return rootList;
+        } else {
+            return menus.stream().map(item -> LabelOptionDTO.builder()
+                    .id(item.getId())
+                    .label(item.getName())
+                    .icon(item.getIcon())
+                    .orderNum(item.getOrderNum())
+                    .build()).collect(Collectors.toList());
+        }
     }
 
     @Transactional(rollbackFor = Exception.class)

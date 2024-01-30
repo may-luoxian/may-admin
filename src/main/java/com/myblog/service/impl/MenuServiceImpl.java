@@ -1,11 +1,10 @@
 package com.myblog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.myblog.entity.Menu;
 import com.myblog.mapper.RoleMenuMapper;
-import com.myblog.model.dto.LabelOptionDTO;
 import com.myblog.model.dto.MenuDTO;
 import com.myblog.model.dto.UserMenuDTO;
 import com.myblog.mapper.MenuMapper;
@@ -20,9 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 import java.util.stream.Collectors;
-
-import static com.myblog.constant.CommonConstant.COMPONENT;
-import static com.myblog.constant.CommonConstant.TRUE;
 
 @Service
 public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
@@ -52,22 +48,31 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     }
 
     @Override
-    public List<MenuDTO> listMenus() {
-        List<Menu> menus = menuMapper.selectList(null);
-        List<Menu> catalogs = listCatalogs(menus);
-        Map<Integer, List<Menu>> childrenMap = getMenuMap(menus);
-        List<MenuDTO> rootList = catalogs.stream()
-                .map(item -> BeanCopyUtil.copyObject(item, MenuDTO.class))
-                .sorted(Comparator.comparing(MenuDTO::getOrderNum))
-                .collect(Collectors.toList());
-        Map<Integer, List<MenuDTO>> childDTOMap = new HashMap<>();
-        childrenMap.forEach((id, menuList) -> {
-            List<MenuDTO> menuDTOList = BeanCopyUtil.copyList(menuList, MenuDTO.class);
-            childDTOMap.put(id, menuDTOList);
-        });
-        MenuDTO t = new MenuDTO();
-        TreeUtil.buildTree(rootList, childDTOMap, t, "children", false);
-        return rootList;
+    public List<MenuDTO> listMenus(MenuVO menuVO) {
+        LambdaQueryWrapper<Menu> wrapper = new LambdaQueryWrapper<Menu>()
+                .like(StringUtils.isNotBlank(menuVO.getName()), Menu::getName, menuVO.getName())
+                .like(menuVO.getMenuType() != null, Menu::getMenuType, menuVO.getMenuType());
+        List<Menu> menus = menuMapper.selectList(wrapper);
+        if (StringUtils.isNotBlank(menuVO.getName()) || menuVO.getMenuType() != null) {
+            return BeanCopyUtil.copyList(menus, MenuDTO.class);
+        } else {
+            List<Menu> catalogs = listCatalogs(menus);
+            Map<Integer, List<Menu>> childrenMap = getMenuMap(menus);
+            List<MenuDTO> rootList = catalogs.stream()
+                    .map(item -> BeanCopyUtil.copyObject(item, MenuDTO.class))
+                    .sorted(Comparator.comparing(MenuDTO::getOrderNum))
+                    .collect(Collectors.toList());
+            Map<Integer, List<MenuDTO>> childDTOMap = new HashMap<>();
+            childrenMap.forEach((id, menuList) -> {
+                List<MenuDTO> menuDTOList = BeanCopyUtil.copyList(menuList, MenuDTO.class);
+                childDTOMap.put(id, menuDTOList);
+            });
+            MenuDTO t = new MenuDTO();
+            TreeUtil.buildTree(rootList, childDTOMap, t, "children", false);
+            return rootList;
+        }
+
+
     }
 
     @Transactional(rollbackFor = Exception.class)

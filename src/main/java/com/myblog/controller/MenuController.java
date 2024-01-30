@@ -35,8 +35,8 @@ public class MenuController {
 
     @ApiOperation("查询系统路由")
     @GetMapping("/menu")
-    public ResultVO<List<MenuDTO>> listMenus() {
-        return ResultVO.ok(menuService.listMenus());
+    public ResultVO<List<MenuDTO>> listMenus(MenuVO menuVO) {
+        return ResultVO.ok(menuService.listMenus(menuVO));
     }
 
     @ApiOperation("删除系统路由")

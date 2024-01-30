@@ -1,14 +1,9 @@
 package com.myblog.controller;
 
-import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
-import com.myblog.exception.BizException;
 import com.myblog.model.dto.LabelOptionDTO;
 import com.myblog.model.dto.PageResultDTO;
 import com.myblog.model.dto.RoleDTO;
-import com.myblog.model.vo.ConditionVO;
-import com.myblog.model.vo.ResultVO;
-import com.myblog.model.vo.RoleVO;
-import com.myblog.model.vo.UserVO;
+import com.myblog.model.vo.*;
 import com.myblog.service.ResourceService;
 import com.myblog.service.RoleService;
 import io.swagger.annotations.Api;
@@ -56,8 +51,8 @@ public class RoleController {
 
     @ApiOperation(value = "查询角色菜单")
     @GetMapping("/menus")
-    public ResultVO<List<LabelOptionDTO>> listRoleMenus() {
-        return ResultVO.ok(roleService.listRoleMenus());
+    public ResultVO<List<LabelOptionDTO>> listRoleMenus(MenuVO menuVO) {
+        return ResultVO.ok(roleService.listRoleMenus(menuVO));
     }
 
     @ApiOperation(value = "新增或修改角色菜单权限")
@@ -89,7 +84,7 @@ public class RoleController {
 
     @ApiOperation(value = "获取角色资源列表")
     @GetMapping("/resources")
-    public ResultVO<List<LabelOptionDTO>> listRoleResources() {
-        return ResultVO.ok(resourceService.listRoleResources());
+    public ResultVO<List<LabelOptionDTO>> listRoleResources(ResourceVO resourceVO) {
+        return ResultVO.ok(resourceService.listRoleResources(resourceVO));
     }
 }

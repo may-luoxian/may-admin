@@ -9,23 +9,17 @@ import com.myblog.handler.FilterInvocationSecurityMetadataSourceImpl;
 import com.myblog.mapper.ResourceMapper;
 import com.myblog.mapper.RoleResourceMapper;
 import com.myblog.model.dto.LabelOptionDTO;
-import com.myblog.model.dto.PageResultDTO;
 import com.myblog.model.dto.ResourceDTO;
 import com.myblog.model.vo.ResourceVO;
-import com.myblog.model.vo.ResultVO;
 import com.myblog.service.ResourceService;
 import com.myblog.util.BeanCopyUtil;
-import com.myblog.util.PageUtil;
 import com.myblog.util.TreeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
-
-import static java.util.concurrent.CompletableFuture.supplyAsync;
 
 @Service
 public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> implements ResourceService {
@@ -38,28 +32,39 @@ public class ResourceServiceImpl extends ServiceImpl<ResourceMapper, Resource> i
     private RoleResourceMapper roleResourceMapper;
 
     @Override
-    public List<LabelOptionDTO> listRoleResources() {
-        List<Resource> resources = resourceMapper.selectList(null);
-        List<Resource> catalogs = listCatalogs(resources);
-        Map<Integer, List<Resource>> resourceMap = getResourceMap(resources);
-        List<LabelOptionDTO> rootList = catalogs.stream()
-                .map(item -> LabelOptionDTO.builder()
-                        .id(item.getId())
-                        .label(item.getResourceName())
-                        .build())
-                .collect(Collectors.toList());
-        HashMap<Integer, List<LabelOptionDTO>> childMap = new HashMap<>();
-        resourceMap.forEach((id, item) -> {
-            List<LabelOptionDTO> labelOptionDTOs = item.stream()
-                    .map(child -> LabelOptionDTO.builder()
-                            .label(child.getResourceName())
-                            .id(child.getId()).build())
+    public List<LabelOptionDTO> listRoleResources(ResourceVO resourceVO) {
+        LambdaQueryWrapper<Resource> wrapper = new LambdaQueryWrapper<Resource>().like(StringUtils.isNotBlank(resourceVO.getResourceName()), Resource::getResourceName, resourceVO.getResourceName());
+        List<Resource> resources = resourceMapper.selectList(wrapper);
+        if (StringUtils.isBlank(resourceVO.getResourceName())) {
+            List<Resource> catalogs = listCatalogs(resources);
+            Map<Integer, List<Resource>> resourceMap = getResourceMap(resources);
+            List<LabelOptionDTO> rootList = catalogs.stream()
+                    .map(item -> LabelOptionDTO.builder()
+                            .id(item.getId())
+                            .label(item.getResourceName())
+                            .build())
                     .collect(Collectors.toList());
-            childMap.put(id, labelOptionDTOs);
-        });
-        LabelOptionDTO t = new LabelOptionDTO();
-        TreeUtil.buildTree(rootList, childMap, t, "children", false);
-        return rootList;
+            HashMap<Integer, List<LabelOptionDTO>> childMap = new HashMap<>();
+            resourceMap.forEach((id, item) -> {
+                List<LabelOptionDTO> labelOptionDTOs = item.stream()
+                        .map(child -> LabelOptionDTO.builder()
+                                .label(child.getResourceName())
+                                .id(child.getId()).build())
+                        .collect(Collectors.toList());
+                childMap.put(id, labelOptionDTOs);
+            });
+            LabelOptionDTO t = new LabelOptionDTO();
+            TreeUtil.buildTree(rootList, childMap, t, "children", false);
+            return rootList;
+        } else {
+            return resources.stream().map(item ->
+                            LabelOptionDTO.builder()
+                                    .id(item.getId())
+                                    .label(item.getResourceName())
+                                    .build()
+                    )
+                    .collect(Collectors.toList());
+        }
     }
 
     @Override

@@ -20,7 +20,7 @@
         is_anonymous,
         create_time,
         update_time
-        FROM my_blog.t_resource
+        FROM t_resource
         <where>
             <if test="resourceVO.resourceName != null and resourceVO.resourceName != ''">
                 resource_name LIKE CONCAT('%', #{resourceVO.resourceName}, '%')

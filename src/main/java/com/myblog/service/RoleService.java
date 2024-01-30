@@ -6,6 +6,7 @@ import com.myblog.model.dto.LabelOptionDTO;
 import com.myblog.model.dto.PageResultDTO;
 import com.myblog.model.dto.RoleDTO;
 import com.myblog.model.vo.ConditionVO;
+import com.myblog.model.vo.MenuVO;
 import com.myblog.model.vo.RoleVO;
 import com.myblog.model.vo.UserVO;
 
@@ -13,7 +14,7 @@ import java.util.List;
 
 public interface RoleService extends IService<Role> {
     PageResultDTO<RoleDTO> listRoles(ConditionVO conditionVO);
-    List<LabelOptionDTO> listRoleMenus();
+    List<LabelOptionDTO> listRoleMenus(MenuVO menuVO);
     void saveOrUpdateMenuAuth(Integer roleId, List<Integer> ids);
     void saveOrUpdateResourceAuth(Integer roleId, List<Integer> ids);
     List<RoleDTO> listAllowRoles();
