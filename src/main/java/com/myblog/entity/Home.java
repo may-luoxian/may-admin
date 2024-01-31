@@ -38,11 +38,6 @@ public class Home {
     private Integer widthValue;
 
     /**
-     * 展示顺序
-     */
-    private Integer order;
-
-    /**
      * 组件路径
      */
     private String component;

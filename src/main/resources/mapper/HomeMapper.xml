@@ -8,7 +8,6 @@
         <id property="id" column="id" jdbcType="INTEGER"/>
         <result property="name" column="name" jdbcType="VARCHAR"/>
         <result property="widthValue" column="width_value" jdbcType="INTEGER"/>
-        <result property="order" column="order" jdbcType="INTEGER"/>
         <result property="component" column="component" jdbcType="VARCHAR"/>
         <result property="description" column="description" jdbcType="VARCHAR"/>
         <result property="isEnable" column="is_enable" jdbcType="INTEGER"/>
@@ -16,9 +15,33 @@
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <sql id="Base_Column_List">
-        id,name,width_value,
-        order,component,description,is_enable
-        create_time,update_time
-    </sql>
+    <sql id="homeManagement">id,name,width_value,component,description</sql>
+
+    <select id="listEnableHome" resultMap="BaseResultMap">
+        SELECT DISTINCT h.id,
+                        h.name,
+                        width_value,
+                        component,
+                        description,
+                        order_num
+        FROM t_user_role ur
+                 LEFT JOIN t_role_home rh ON ur.role_id = rh.role_id
+                 LEFT JOIN t_home h ON rh.home_id = h.id
+        WHERE user_id = #{userId}
+        ORDER BY order_num;
+    </select>
+
+    <select id="listNotEnableHome" resultMap="BaseResultMap">
+        SELECT DISTINCT h.id,
+                        h.name,
+                        width_value,
+                        component,
+                        description
+        FROM t_home h
+        WHERE h.id NOT IN (SELECT DISTINCT h.id
+                           FROM t_user_role ur
+                                    LEFT JOIN t_role_home rh ON ur.role_id = rh.role_id
+                                    LEFT JOIN t_home h ON rh.home_id = h.id
+                           WHERE user_id = #{userId});
+    </select>
 </mapper>
