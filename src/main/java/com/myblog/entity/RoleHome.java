@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("t_role")
+@TableName("t_role_home")
 public class RoleHome {
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;

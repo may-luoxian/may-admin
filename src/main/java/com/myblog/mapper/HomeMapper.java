@@ -15,9 +15,13 @@ import java.util.List;
 */
 @Repository
 public interface HomeMapper extends BaseMapper<Home> {
-    List<Home> listEnableHome(@Param("userId") Integer id);
+    List<Home> listEnableHomeByUser(@Param("userId") Integer id);
 
-    List<Home> listNotEnableHome(@Param("userId") Integer id);
+    List<Home> listNotEnableHomeByUser(@Param("userId") Integer id);
+
+    List<Home> listEnalbeHomeByRole(@Param("roleId") Integer id);
+
+    List<Home> listNotEnableHomeByRole(@Param("roleId") Integer id);
 }
 
 

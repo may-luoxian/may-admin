@@ -6,6 +6,7 @@
         <result property="userInfoId" column="user_info_id"/>
         <result property="avatar" column="avatar"/>
         <result property="nickname" column="nickname"/>
+        <result property="username" column="username"/>
         <result property="loginType" column="login_type"/>
         <result property="ipAddress" column="ip_address"/>
         <result property="ipSource" column="ip_source"/>
@@ -23,6 +24,7 @@
         user_info_id,
         avatar,
         nickname,
+        username,
         login_type,
         r.id as role_id,
         role_name,

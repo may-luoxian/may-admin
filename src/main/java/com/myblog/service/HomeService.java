@@ -3,7 +3,11 @@ package com.myblog.service;
 import com.myblog.entity.Home;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.myblog.model.dto.HomeEnableAndNotEnableDTO;
+import com.myblog.model.vo.HomeOrderVO;
 import com.myblog.model.vo.HomeVO;
+
+import java.util.List;
+import java.util.Map;
 
 /**
 * @author lx_syk
@@ -15,5 +19,11 @@ public interface HomeService extends IService<Home> {
 
     void editModel(HomeVO homeVO);
 
-    HomeEnableAndNotEnableDTO getEnableNotEnableList();
+    HomeEnableAndNotEnableDTO getEnableNotEnableListByUser(Integer userId);
+
+    HomeEnableAndNotEnableDTO getEnableNotEnableListByRole(Integer roleId);
+
+    void enableUserHome(Integer userId, List<HomeOrderVO> homeOrderList);
+
+    void enableRoleHome(Integer roleId, List<HomeOrderVO> homeOrderList);
 }

@@ -15,9 +15,7 @@
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
 
-    <sql id="homeManagement">id,name,width_value,component,description</sql>
-
-    <select id="listEnableHome" resultMap="BaseResultMap">
+    <select id="listEnableHomeByUser" resultMap="BaseResultMap">
         SELECT DISTINCT h.id,
                         h.name,
                         width_value,
@@ -31,7 +29,7 @@
         ORDER BY order_num;
     </select>
 
-    <select id="listNotEnableHome" resultMap="BaseResultMap">
+    <select id="listNotEnableHomeByUser" resultMap="BaseResultMap">
         SELECT DISTINCT h.id,
                         h.name,
                         width_value,
@@ -43,5 +41,31 @@
                                     LEFT JOIN t_role_home rh ON ur.role_id = rh.role_id
                                     LEFT JOIN t_home h ON rh.home_id = h.id
                            WHERE user_id = #{userId});
+    </select>
+
+    <select id="listEnalbeHomeByRole" resultMap="BaseResultMap">
+        SELECT DISTINCT h.id,
+                        h.name,
+                        width_value,
+                        component,
+                        description
+        FROM t_role r
+                 LEFT JOIN t_role_home rh ON r.id = rh.role_id
+                 LEFT JOIN t_home h ON rh.home_id = h.id
+        WHERE r.id = #{roleId}
+    </select>
+
+    <select id="listNotEnableHomeByRole" resultMap="BaseResultMap">
+        SELECT DISTINCT h.id,
+                        h.NAME,
+                        width_value,
+                        component,
+                        description
+        FROM t_home h
+        WHERE h.id NOT IN (SELECT DISTINCT h.id
+                           FROM t_role r
+                                    LEFT JOIN t_role_home rh ON r.id = rh.role_id
+                                    LEFT JOIN t_home h ON rh.home_id = h.id
+                           WHERE r.id = #{roleId})
     </select>
 </mapper>

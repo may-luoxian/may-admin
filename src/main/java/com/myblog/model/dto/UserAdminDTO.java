@@ -24,6 +24,8 @@ public class UserAdminDTO {
 
     private String nickname;
 
+    private String username;
+
     private List<UserRoleDTO> roles;
 
     private Integer loginType;
