@@ -140,6 +140,9 @@ public class HomeServiceImpl extends ServiceImpl<HomeMapper, Home> implements Ho
         List<HomeDTO> enableDTO = BeanCopyUtil.copyList(enableList, HomeDTO.class);
         // 启用模块需要根据userhome表排序
         UserHome userHome = userHomeService.selectByUserId(userId);
+        if (ObjectUtils.isEmpty(userHome)) {
+            return enableDTO;
+        }
         String homeOrder = userHome.getHomeOrder();
         List<HomeOrderVO> homeOrderVOList = JSONUtil.toList(homeOrder, HomeOrderVO.class);
         homeOrderVOList.stream().sorted(Comparator.comparing(HomeOrderVO::getOrderNum));
