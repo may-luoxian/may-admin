@@ -19,13 +19,16 @@ import com.myblog.mapper.HomeMapper;
 import com.myblog.service.RoleHomeService;
 import com.myblog.service.UserHomeService;
 import com.myblog.util.BeanCopyUtil;
+import com.myblog.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @author lx_syk
@@ -65,10 +68,9 @@ public class HomeServiceImpl extends ServiceImpl<HomeMapper, Home> implements Ho
 
     @Override
     public HomeEnableAndNotEnableDTO getEnableNotEnableListByUser(Integer userId) {
-        List<Home> enableList = homeMapper.listEnableHomeByUser(userId);
-        List<HomeDTO> enableDTO = BeanCopyUtil.copyList(enableList, HomeDTO.class);
         List<Home> notEnableList = homeMapper.listNotEnableHomeByUser(userId);
         List<HomeDTO> notEnableDTO = BeanCopyUtil.copyList(notEnableList, HomeDTO.class);
+        List<HomeDTO> enableDTO = getOrderHomeList(userId);
         return HomeEnableAndNotEnableDTO.builder()
                 .enableList(enableDTO)
                 .notEnableList(notEnableDTO)
@@ -114,6 +116,45 @@ public class HomeServiceImpl extends ServiceImpl<HomeMapper, Home> implements Ho
                     .collect(Collectors.toList());
             roleHomeService.saveBatch(collect);
         }
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    @Override
+    public void deleteHomeById(Integer id) {
+        if (id == null) {
+            throw new BizException("id不能为空");
+        }
+        this.removeById(id);
+        roleHomeService.remove(new LambdaQueryWrapper<RoleHome>()
+                .eq(RoleHome::getHomeId, id));
+    }
+
+    @Override
+    public List<HomeDTO> getHomeList() {
+        Integer userInfoId = UserUtil.getUserDetailsDTO().getUserInfoId();
+        return getOrderHomeList(userInfoId);
+    }
+
+    private List<HomeDTO> getOrderHomeList(Integer userId) {
+        List<Home> enableList = homeMapper.listEnableHomeByUser(userId);
+        List<HomeDTO> enableDTO = BeanCopyUtil.copyList(enableList, HomeDTO.class);
+        // 启用模块需要根据userhome表排序
+        UserHome userHome = userHomeService.selectByUserId(userId);
+        String homeOrder = userHome.getHomeOrder();
+        List<HomeOrderVO> homeOrderVOList = JSONUtil.toList(homeOrder, HomeOrderVO.class);
+        homeOrderVOList.stream().sorted(Comparator.comparing(HomeOrderVO::getOrderNum));
+        List<HomeDTO> orderList = new ArrayList<>();
+        homeOrderVOList.stream().forEach((item) -> {
+            enableDTO.stream().forEach(enableHome -> {
+                if (ObjectUtils.isNotEmpty(enableHome) && item.getHomeId().equals(enableHome.getId())) {
+                    orderList.add(enableHome);
+                }
+            });
+        });
+        return Stream.concat(orderList.stream(), enableDTO.stream())
+                .distinct()
+                .collect(Collectors.toList());
+
     }
 }
 

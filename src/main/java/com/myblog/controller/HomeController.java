@@ -1,6 +1,7 @@
 package com.myblog.controller;
 
 import com.myblog.exception.BizException;
+import com.myblog.model.dto.HomeDTO;
 import com.myblog.model.dto.HomeEnableAndNotEnableDTO;
 import com.myblog.model.vo.HomeEnableVO;
 import com.myblog.model.vo.HomeOrderVO;
@@ -64,5 +65,19 @@ public class HomeController {
             throw new BizException("不能识别启用类型");
         }
         return ResultVO.ok();
+    }
+
+    @ApiOperation("删除门户")
+    @DeleteMapping("/delete")
+    public ResultVO deleteHome(@RequestBody Map<String, Integer> map) {
+        Integer id = map.get("id");
+        homeService.deleteHomeById(id);
+        return ResultVO.ok();
+    }
+
+    @ApiOperation("获取用户门户")
+    @GetMapping("/list")
+    public ResultVO<List<HomeDTO>> getHomeList() {
+        return ResultVO.ok(homeService.getHomeList());
     }
 }
