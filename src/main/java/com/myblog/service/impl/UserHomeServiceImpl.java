@@ -1,5 +1,6 @@
 package com.myblog.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.myblog.entity.UserHome;
 import com.myblog.mapper.UserHomeMapper;
@@ -15,6 +16,7 @@ public class UserHomeServiceImpl extends ServiceImpl<UserHomeMapper, UserHome> i
 
     @Override
     public UserHome selectByUserId(Integer userInfoId) {
-        return userHomeMapper.selectById(userInfoId);
+        LambdaQueryWrapper<UserHome> wrapper = new LambdaQueryWrapper<UserHome>().eq(UserHome::getUserInfoId, userInfoId);
+        return userHomeMapper.selectOne(wrapper);
     }
 }
