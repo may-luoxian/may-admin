@@ -17,4 +17,6 @@ public class HomeDTO {
 
 
     private String description;
+
+    private String previewImg;
 }

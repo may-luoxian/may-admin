@@ -53,7 +53,6 @@ public class HomeServiceImpl extends ServiceImpl<HomeMapper, Home> implements Ho
             throw new BizException(StatusCodeEnum.VALID_ERROR.getDesc());
         }
         Home home = BeanCopyUtil.copyObject(homeVO, Home.class);
-        home.setIsEnable(0);
         this.save(home);
     }
 

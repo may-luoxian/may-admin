@@ -48,9 +48,9 @@ public class Home {
     private String description;
 
     /**
-     * 是否启用
+     * 预览图片
      */
-    private Integer isEnable;
+    private String previewImg;
 
     /**
      * 创建时间

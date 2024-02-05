@@ -12,15 +12,15 @@ public class HomeVO {
     @ApiModelProperty(name = "name", value = "门户块名称", dataType = "String")
     private String name;
 
-    @ApiModelProperty(name = "id", value = "门户块宽度", dataType = "Integer")
+    @ApiModelProperty(name = "widthValue", value = "门户块宽度", dataType = "Integer")
     private Integer widthValue;
 
-    @ApiModelProperty(name = "id", value = "门户块组件名称", dataType = "String")
+    @ApiModelProperty(name = "component", value = "门户块组件名称", dataType = "String")
     private String component;
 
-    @ApiModelProperty(name = "id", value = "门户块描述", dataType = "String")
+    @ApiModelProperty(name = "description", value = "门户块描述", dataType = "String")
     private String description;
 
-    @ApiModelProperty(name = "id", value = "是否启用", dataType = "Integer")
-    private Integer isEnable;
+    @ApiModelProperty(name = "previewImg", value = "预览图片", dataType = "String")
+    private String previewImg;
 }

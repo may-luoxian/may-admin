@@ -10,7 +10,7 @@
         <result property="widthValue" column="width_value" jdbcType="INTEGER"/>
         <result property="component" column="component" jdbcType="VARCHAR"/>
         <result property="description" column="description" jdbcType="VARCHAR"/>
-        <result property="isEnable" column="is_enable" jdbcType="INTEGER"/>
+        <result property="previewImg" column="preview_img" jdbcType="VARCHAR"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
     </resultMap>
@@ -21,6 +21,7 @@
                         width_value,
                         component,
                         description,
+                        preview_img,
                         order_num
         FROM t_user_role ur
                  JOIN t_role_home rh ON ur.role_id = rh.role_id
@@ -34,6 +35,7 @@
                         h.name,
                         width_value,
                         component,
+                        preview_img,
                         description
         FROM t_home h
         WHERE h.id NOT IN (SELECT DISTINCT h.id
@@ -48,6 +50,7 @@
                         h.name,
                         width_value,
                         component,
+                        preview_img,
                         description
         FROM t_role r
                   JOIN t_role_home rh ON r.id = rh.role_id
@@ -60,6 +63,7 @@
                         h.NAME,
                         width_value,
                         component,
+                        preview_img,
                         description
         FROM t_home h
         WHERE h.id NOT IN (SELECT DISTINCT h.id
