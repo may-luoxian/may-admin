@@ -42,22 +42,27 @@
         is_disable
         FROM
         t_user_info
-<!--        <where>-->
-<!--            <if test="conditionVO.loginType != null">-->
-<!--                id in-->
-<!--                (-->
-<!--                SELECT-->
-<!--                user_info_id-->
-<!--                FROM-->
-<!--                t_user_auth-->
-<!--                WHERE-->
-<!--                login_type = #{conditionVO.loginType}-->
-<!--                )-->
-<!--            </if>-->
-<!--            <if test="conditionVO.keywords != null">-->
-<!--                and nickname like concat('%',#{conditionVO.keywords},'%')-->
-<!--            </if>-->
-<!--        </where>-->
+        <where>
+            id in
+            (
+            SELECT
+            user_info_id
+            FROM
+            t_user_auth
+            <where>
+                <if test="conditionVO.loginType != null">
+                    login_type = #{conditionVO.loginType}
+                </if>
+                <if test="conditionVO.username != null">
+                    and username like concat('%',#{conditionVO.username},'%')
+                </if>
+                <if test="conditionVO.nickname != null">
+                    and nickname like concat('%',#{conditionVO.nickname},'%')
+                </if>
+            </where>
+            )
+        </where>
+        LIMIT #{current}, #{size}
         ) ui
         LEFT JOIN t_user_auth ua ON ua.user_info_id = ui.id
         LEFT JOIN t_user_role ur ON ui.id = ur.user_id
@@ -70,8 +75,11 @@
         t_user_auth ua
         LEFT JOIN t_user_info ui ON ua.user_info_id = ui.id
         <where>
-            <if test="conditionVO.keywords != null">
-                nickname like concat('%',#{conditionVO.keywords},'%')
+            <if test="conditionVO.nickname != null">
+                nickname like concat('%',#{conditionVO.nickname},'%')
+            </if>
+            <if test="conditionVO.username != null">
+                and username like concat('%',#{conditionVO.username},'%')
             </if>
             <if test="conditionVO.loginType != null">
                 and login_type = #{conditionVO.loginType}

@@ -1,7 +1,9 @@
 package com.myblog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.myblog.entity.Role;
 import com.myblog.entity.UserAuth;
 import com.myblog.entity.UserInfo;
 import com.myblog.entity.UserRole;
@@ -10,14 +12,17 @@ import com.myblog.exception.BizException;
 import com.myblog.mapper.UserAuthMapper;
 import com.myblog.mapper.UserInfoMapper;
 import com.myblog.mapper.UserRoleMapper;
+import com.myblog.model.dto.PageResultDTO;
 import com.myblog.model.dto.UserAdminDTO;
 import com.myblog.model.dto.UserDetailsDTO;
 import com.myblog.model.dto.UserInfoDTO;
 import com.myblog.model.vo.ConditionVO;
+import com.myblog.model.vo.UserConditionVO;
 import com.myblog.service.RedisService;
 import com.myblog.service.UserAuthService;
 import com.myblog.strategy.context.UploadStrategyContext;
 import com.myblog.util.BeanCopyUtil;
+import com.myblog.util.PageUtil;
 import com.myblog.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -50,8 +55,10 @@ public class UserAuthServiceImpl extends ServiceImpl<UserAuthMapper, UserAuth> i
     private UploadStrategyContext uploadStrategyContext;
 
     @Override
-    public List<UserAdminDTO> listUsers(ConditionVO conditionVO) {
-        return userAuthMapper.listUsers(conditionVO);
+    public PageResultDTO<UserAdminDTO> listUsers(UserConditionVO conditionVO) {
+        List<UserAdminDTO> userAdminDTOS = userAuthMapper.listUsers(PageUtil.getLimitCurrent(), PageUtil.getSize(), conditionVO);
+        Integer count = userAuthMapper.countUser(conditionVO);
+        return new PageResultDTO<UserAdminDTO>(userAdminDTOS, count);
     }
 
     @Override

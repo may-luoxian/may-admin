@@ -1,10 +1,12 @@
 package com.myblog.controller;
 
+import com.myblog.model.dto.PageResultDTO;
 import com.myblog.model.dto.UserAdminDTO;
 import com.myblog.model.dto.UserDetailsDTO;
 import com.myblog.model.dto.UserInfoDTO;
 import com.myblog.model.vo.ConditionVO;
 import com.myblog.model.vo.ResultVO;
+import com.myblog.model.vo.UserConditionVO;
 import com.myblog.service.UserAuthService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -24,7 +26,7 @@ public class UserAuthController {
 
     @ApiOperation("获取用户列表")
     @GetMapping("/list")
-    public ResultVO<List<UserAdminDTO>> listUsers(ConditionVO conditionVO) {
+    public ResultVO<PageResultDTO<UserAdminDTO>> listUsers(UserConditionVO conditionVO) {
         return ResultVO.ok(userAuthService.listUsers(conditionVO));
     }
 
