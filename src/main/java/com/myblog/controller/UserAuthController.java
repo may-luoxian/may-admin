@@ -4,7 +4,6 @@ import com.myblog.model.dto.PageResultDTO;
 import com.myblog.model.dto.UserAdminDTO;
 import com.myblog.model.dto.UserDetailsDTO;
 import com.myblog.model.dto.UserInfoDTO;
-import com.myblog.model.vo.ConditionVO;
 import com.myblog.model.vo.ResultVO;
 import com.myblog.model.vo.UserConditionVO;
 import com.myblog.service.UserAuthService;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Map;
 
 @Api(tags = "用户账号模块")

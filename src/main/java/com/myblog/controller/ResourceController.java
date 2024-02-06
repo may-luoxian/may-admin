@@ -1,19 +1,15 @@
 package com.myblog.controller;
 
-import com.myblog.model.dto.LabelOptionDTO;
-import com.myblog.model.dto.PageResultDTO;
 import com.myblog.model.dto.ResourceDTO;
 import com.myblog.model.vo.ResourceVO;
 import com.myblog.model.vo.ResultVO;
 import com.myblog.service.ResourceService;
-import com.myblog.service.RoleResourceService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Api(tags = "资源模块")
 @RestController

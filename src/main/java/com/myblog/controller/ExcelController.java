@@ -4,7 +4,6 @@ import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.write.metadata.WriteSheet;
 import com.alibaba.excel.write.metadata.style.WriteCellStyle;
-import com.alibaba.excel.write.style.HorizontalCellStyleStrategy;
 import com.myblog.entity.ExcelDemo;
 import io.swagger.annotations.Api;
 import org.slf4j.Logger;

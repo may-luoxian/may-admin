@@ -1,9 +1,7 @@
 package com.myblog.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.myblog.entity.Role;
 import com.myblog.entity.UserAuth;
 import com.myblog.entity.UserInfo;
 import com.myblog.entity.UserRole;
@@ -16,7 +14,6 @@ import com.myblog.model.dto.PageResultDTO;
 import com.myblog.model.dto.UserAdminDTO;
 import com.myblog.model.dto.UserDetailsDTO;
 import com.myblog.model.dto.UserInfoDTO;
-import com.myblog.model.vo.ConditionVO;
 import com.myblog.model.vo.UserConditionVO;
 import com.myblog.service.RedisService;
 import com.myblog.service.UserAuthService;
