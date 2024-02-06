@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 
-@Api(tags = "首页模块")
+@Api(tags = "门户模块")
 @RestController
 @RequestMapping("/admin/home")
 public class HomeController {
@@ -24,27 +24,27 @@ public class HomeController {
     @Autowired
     private HomeService homeService;
 
-    @ApiOperation("创建模块")
+    @ApiOperation("创建门户")
     @PostMapping("/add")
     public ResultVO<?> createModel(@RequestBody HomeVO homeVO) {
         homeService.createModel(homeVO);
         return ResultVO.ok();
     }
 
-    @ApiOperation("编辑模块")
+    @ApiOperation("编辑门户")
     @PostMapping("/edit")
     public ResultVO<?> editModel(@RequestBody HomeVO homeVO) {
         homeService.editModel(homeVO);
         return ResultVO.ok();
     }
 
-    @ApiOperation("查询用户启用，未启用模块")
+    @ApiOperation("查询用户启用，未启用门户")
     @GetMapping("/listByUser")
     public ResultVO<HomeEnableAndNotEnableDTO> getHomeListByUser(Integer userId) {
         return ResultVO.ok(homeService.getEnableNotEnableListByUser(userId));
     }
 
-    @ApiOperation("查询角色启用，未启用模块")
+    @ApiOperation("查询角色启用，未启用门户")
     @GetMapping("/listByRole")
     public ResultVO<HomeEnableAndNotEnableDTO> getHomeListByRole(Integer roleId) {
         return ResultVO.ok(homeService.getEnableNotEnableListByRole(roleId));
