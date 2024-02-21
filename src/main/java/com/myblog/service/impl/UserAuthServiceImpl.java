@@ -3,11 +3,13 @@ package com.myblog.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.myblog.entity.UserAuth;
+import com.myblog.entity.UserHome;
 import com.myblog.entity.UserInfo;
 import com.myblog.entity.UserRole;
 import com.myblog.enums.FilePathEnum;
 import com.myblog.exception.BizException;
 import com.myblog.mapper.UserAuthMapper;
+import com.myblog.mapper.UserHomeMapper;
 import com.myblog.mapper.UserInfoMapper;
 import com.myblog.mapper.UserRoleMapper;
 import com.myblog.model.dto.PageResultDTO;
@@ -44,6 +46,9 @@ public class UserAuthServiceImpl extends ServiceImpl<UserAuthMapper, UserAuth> i
 
     @Autowired
     private UserRoleMapper userRoleMapper;
+
+    @Autowired
+    private UserHomeMapper userHomeMapper;
 
     @Autowired
     private RedisService redisService;
@@ -111,6 +116,7 @@ public class UserAuthServiceImpl extends ServiceImpl<UserAuthMapper, UserAuth> i
         userRoleMapper.delete(new LambdaQueryWrapper<UserRole>().eq(UserRole::getUserId, userInfoId));
         userInfoMapper.delete(new LambdaQueryWrapper<UserInfo>().eq(UserInfo::getId, userInfoId));
         userAuthMapper.delete(new LambdaQueryWrapper<UserAuth>().eq(UserAuth::getId, id));
+        userHomeMapper.delete(new LambdaQueryWrapper<UserHome>().eq(UserHome::getUserInfoId, userInfoId));
     }
 
     private Boolean checkUser(UserDetailsDTO userDetailsDTO) {
