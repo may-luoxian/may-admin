@@ -2,6 +2,7 @@ package com.myblog.service;
 
 import com.myblog.entity.OjQuestionSubmit;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.myblog.model.vo.oj.OjQuestionSubmitVO;
 
 /**
 * @author sunyukun
@@ -9,5 +10,5 @@ import com.baomidou.mybatisplus.extension.service.IService;
 * @createDate 2024-01-28 06:19:53
 */
 public interface OjQuestionSubmitService extends IService<OjQuestionSubmit> {
-
+    Integer questionSubmit(OjQuestionSubmitVO questionSubmitVO);
 }

@@ -56,10 +56,34 @@ public class HomeServiceImpl extends ServiceImpl<HomeMapper, Home> implements Ho
         this.save(home);
     }
 
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public void editModel(HomeVO homeVO) {
         if (ObjectUtils.isEmpty(homeVO)) {
             throw new BizException(StatusCodeEnum.VALID_ERROR.getDesc());
+        }
+        if (homeVO.getControlStatus() == 1) {
+            UserHome userHome = userHomeService.selectByUserId(homeVO.getUserId());
+            String homeOrder = userHome.getHomeOrder();
+            List<HomeOrderVO> homeOrderVOList = JSONUtil.toList(homeOrder, HomeOrderVO.class);
+            boolean flag = false;
+            for (HomeOrderVO item: homeOrderVOList) {
+                if (item.getHomeId() == homeVO.getId()) {
+                    item.setWidthValue(homeVO.getWidthValue());
+                    flag = true;
+                }
+            }
+            if (!flag) {
+                HomeOrderVO homeOrderVO = new HomeOrderVO();
+                homeOrderVO.setHomeId(homeVO.getId());
+                homeOrderVO.setWidthValue(homeVO.getWidthValue());
+                homeOrderVOList.add(homeOrderVO);
+            }
+            String str = JSONUtil.toJsonStr(homeOrderVOList);
+            userHome.setHomeOrder(str);
+            LambdaUpdateWrapper<UserHome> updateWrapper = new LambdaUpdateWrapper<UserHome>()
+                    .eq(UserHome::getUserInfoId, homeVO.getUserId());
+            userHomeService.update(userHome, updateWrapper);
         }
         Home home = BeanCopyUtil.copyObject(homeVO, Home.class);
         this.updateById(home);
@@ -70,6 +94,16 @@ public class HomeServiceImpl extends ServiceImpl<HomeMapper, Home> implements Ho
         List<Home> notEnableList = homeMapper.listNotEnableHomeByUser(userId);
         List<HomeDTO> notEnableDTO = BeanCopyUtil.copyList(notEnableList, HomeDTO.class);
         List<HomeDTO> enableDTO = getOrderHomeList(userId);
+        UserHome userHome = userHomeService.selectByUserId(userId);
+        List<HomeOrderVO> homeOrderVOList = JSONUtil.toList(userHome.getHomeOrder(), HomeOrderVO.class);
+        enableDTO.stream()
+                .forEach(homeDTO -> {
+                    homeOrderVOList.stream().forEach(homeOrderVO -> {
+                        if (homeDTO.getId() == homeOrderVO.getHomeId()) {
+                            homeDTO.setWidthValue(homeOrderVO.getWidthValue());
+                        }
+                    });
+                });
         return HomeEnableAndNotEnableDTO.builder()
                 .enableList(enableDTO)
                 .notEnableList(notEnableDTO)

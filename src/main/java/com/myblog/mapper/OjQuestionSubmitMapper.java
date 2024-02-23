@@ -2,6 +2,7 @@ package com.myblog.mapper;
 
 import com.myblog.entity.OjQuestionSubmit;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
 
 /**
 * @author sunyukun
@@ -9,6 +10,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2024-01-28 06:19:53
 * @Entity com.myblog.entity.OjQuestionSubmit
 */
+@Mapper
 public interface OjQuestionSubmitMapper extends BaseMapper<OjQuestionSubmit> {
 
 }

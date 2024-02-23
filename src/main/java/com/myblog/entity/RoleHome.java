@@ -20,4 +20,6 @@ public class RoleHome {
     private Integer roleId;
 
     private Integer orderNum;
+
+    private Integer widthValue;
 }

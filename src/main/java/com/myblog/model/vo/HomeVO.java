@@ -9,6 +9,9 @@ public class HomeVO {
     @ApiModelProperty(name = "id", value = "门户块id", dataType = "Integer")
     private Integer id;
 
+    @ApiModelProperty(name = "userId", value = "修改门户的用户Id", dataType = "Integer")
+    private Integer userId;
+
     @ApiModelProperty(name = "name", value = "门户块名称", dataType = "String")
     private String name;
 
@@ -23,4 +26,7 @@ public class HomeVO {
 
     @ApiModelProperty(name = "previewImg", value = "预览图片", dataType = "String")
     private String previewImg;
+
+    @ApiModelProperty(name = "controlStatus", value = "操作状态", dataType = "Integer")
+    private Integer controlStatus;
 }

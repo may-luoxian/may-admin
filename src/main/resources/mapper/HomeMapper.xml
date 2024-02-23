@@ -18,7 +18,7 @@
     <select id="listEnableHomeByUser" resultMap="BaseResultMap">
         SELECT DISTINCT h.id,
                         h.name,
-                        width_value,
+                        rh.width_value,
                         component,
                         description,
                         preview_img,
@@ -33,7 +33,7 @@
     <select id="listNotEnableHomeByUser" resultMap="BaseResultMap">
         SELECT DISTINCT h.id,
                         h.name,
-                        width_value,
+                        h.width_value,
                         component,
                         preview_img,
                         description
@@ -48,7 +48,7 @@
     <select id="listEnalbeHomeByRole" resultMap="BaseResultMap">
         SELECT DISTINCT h.id,
                         h.name,
-                        width_value,
+                        rh.width_value,
                         component,
                         preview_img,
                         description
@@ -61,7 +61,7 @@
     <select id="listNotEnableHomeByRole" resultMap="BaseResultMap">
         SELECT DISTINCT h.id,
                         h.NAME,
-                        width_value,
+                        h.width_value,
                         component,
                         preview_img,
                         description

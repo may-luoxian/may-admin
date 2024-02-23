@@ -5,7 +5,7 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver
-#    url: jdbc:mysql://localhost:3306/my_blog?serverTimezone=Asia/Shanghai&allowMultiQueries=true
+#    url: jdbc:mysql://localhost:3306/may_blog?serverTimezone=Asia/Shanghai&allowMultiQueries=true
     url: jdbc:mysql://49.232.158.14:3306/may_blog?serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root
     password: syk20010416
