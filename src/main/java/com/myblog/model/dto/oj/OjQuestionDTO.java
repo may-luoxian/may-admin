@@ -13,6 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OjQuestionDTO {
+    private Integer id;
+
     private String title;
 
     private String content;
@@ -25,9 +27,9 @@ public class OjQuestionDTO {
 
     private Integer acceptNum;
 
-    private String judgeConfig;
+    private JudgeConfigDTO judgeConfig;
 
-    private String judgeCase;
+    private List<JudgeCaseDTO> judgeCases;
 
     private Integer userId;
 

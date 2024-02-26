@@ -1,7 +1,10 @@
 package com.myblog.model.dto.oj;
 
-public class JudgeConfigDTO {
-    private String input;
+import lombok.Data;
 
-    private String output;
+@Data
+public class JudgeConfigDTO {
+    private Long timeLimit;
+    private Long stackLimit;
+    private Long memoryLimit;
 }

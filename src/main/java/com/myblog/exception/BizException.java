@@ -1,7 +1,6 @@
 package com.myblog.exception;
 
 import com.myblog.enums.StatusCodeEnum;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter

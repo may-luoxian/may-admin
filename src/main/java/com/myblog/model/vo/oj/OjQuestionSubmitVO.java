@@ -2,8 +2,6 @@ package com.myblog.model.vo.oj;
 
 import lombok.Data;
 
-import java.util.Date;
-
 @Data
 public class OjQuestionSubmitVO {
     private Integer questionId;

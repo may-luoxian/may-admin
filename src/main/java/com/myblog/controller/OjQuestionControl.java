@@ -1,12 +1,10 @@
 package com.myblog.controller;
 
-import com.alibaba.fastjson.JSON;
 import com.myblog.entity.OjQuestion;
 import com.myblog.exception.BizException;
 import com.myblog.model.dto.oj.OjQuestionDTO;
 import com.myblog.model.vo.ResultVO;
 import com.myblog.service.OjQuestionService;
-import com.myblog.util.BeanCopyUtil;
 import com.myblog.util.UserUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 
 @Api(tags = "oj模块-题目")
 @RestController
@@ -28,14 +25,7 @@ public class OjQuestionControl {
     @ApiOperation("添加题目")
     @PostMapping("/")
     public ResultVO<Integer> addQuestion(@RequestBody OjQuestionDTO ojQuestionDTO) {
-        if (Objects.isNull(ojQuestionDTO)) {
-            throw new BizException("题目不能为空");
-        }
-        OjQuestion ojQuestion = BeanCopyUtil.copyObject(ojQuestionDTO, OjQuestion.class);
-        List<String> tags = ojQuestionDTO.getTags();
-        if (Objects.nonNull(tags)) {
-            ojQuestion.setTags(JSON.toJSONString(tags));
-        }
+        OjQuestion ojQuestion = ojQuestionService.copyQuestion(ojQuestionDTO);
         // 验证题目是否符合规范
         ojQuestionService.validateQuestion(ojQuestion, true);
 
@@ -52,14 +42,7 @@ public class OjQuestionControl {
     @ApiOperation("修改题目")
     @PutMapping("/")
     public ResultVO<Integer> updateQuestion(@RequestBody OjQuestionDTO ojQuestionDTO) {
-        if (Objects.isNull(ojQuestionDTO)) {
-            throw new BizException("题目不能为空");
-        }
-        OjQuestion ojQuestion = BeanCopyUtil.copyObject(ojQuestionDTO, OjQuestion.class);
-        List<String> tags = ojQuestionDTO.getTags();
-        if (Objects.nonNull(tags)) {
-            ojQuestion.setTags(JSON.toJSONString(tags));
-        }
+        OjQuestion ojQuestion = ojQuestionService.copyQuestion(ojQuestionDTO);
         // 验证题目是否符合规范
         ojQuestionService.validateQuestion(ojQuestion, false);
 

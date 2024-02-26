@@ -1,7 +1,6 @@
 package com.myblog.service.impl;
 
 import cn.hutool.json.JSONUtil;
-import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.myblog.entity.OjQuestion;
 import com.myblog.entity.OjQuestionSubmit;
@@ -14,7 +13,6 @@ import com.myblog.service.OjQuestionSubmitService;
 import com.myblog.mapper.OjQuestionSubmitMapper;
 import com.myblog.util.BeanCopyUtil;
 import com.myblog.util.UserUtil;
-import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

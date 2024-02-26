@@ -1,7 +1,6 @@
 package com.myblog.util;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import org.springframework.context.annotation.Bean;
 
 import java.util.Objects;
 

@@ -6,11 +6,8 @@ import com.myblog.model.dto.PageResultDTO;
 import com.myblog.model.dto.UserAdminDTO;
 import com.myblog.model.dto.UserDetailsDTO;
 import com.myblog.model.dto.UserInfoDTO;
-import com.myblog.model.vo.ConditionVO;
 import com.myblog.model.vo.UserConditionVO;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.util.List;
 
 public interface UserAuthService extends IService<UserAuth> {
     PageResultDTO<UserAdminDTO> listUsers(UserConditionVO conditionVO);

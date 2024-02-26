@@ -2,6 +2,7 @@ package com.myblog.service;
 
 import com.myblog.entity.OjQuestion;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.myblog.model.dto.oj.OjQuestionDTO;
 
 /**
 * @author sunyukun
@@ -10,4 +11,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface OjQuestionService extends IService<OjQuestion> {
     void validateQuestion(OjQuestion ojQuestion, boolean add);
+
+    OjQuestion copyQuestion(OjQuestionDTO ojQuestionDTO);
 }
