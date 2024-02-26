@@ -28,16 +28,6 @@ public class Home {
     private String name;
 
     /**
-     * 模块宽度
-     * 1：1/4
-     * 2：1/3
-     * 3：1/2
-     * 4：2/3
-     * 5：100%
-     */
-    private Integer widthValue;
-
-    /**
      * 组件路径
      */
     private String component;

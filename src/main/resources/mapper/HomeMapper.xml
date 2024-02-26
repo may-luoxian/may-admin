@@ -4,11 +4,11 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.myblog.mapper.HomeMapper">
 
-    <resultMap id="BaseResultMap" type="com.myblog.entity.Home">
+    <resultMap id="BaseResultMap" type="com.myblog.model.dto.HomeDTO">
         <id property="id" column="id" jdbcType="INTEGER"/>
         <result property="name" column="name" jdbcType="VARCHAR"/>
-        <result property="widthValue" column="width_value" jdbcType="INTEGER"/>
         <result property="component" column="component" jdbcType="VARCHAR"/>
+        <result property="widthValue" column="width_value" jdbcType="INTEGER"/>
         <result property="description" column="description" jdbcType="VARCHAR"/>
         <result property="previewImg" column="preview_img" jdbcType="VARCHAR"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
@@ -33,7 +33,6 @@
     <select id="listNotEnableHomeByUser" resultMap="BaseResultMap">
         SELECT DISTINCT h.id,
                         h.name,
-                        h.width_value,
                         component,
                         preview_img,
                         description
@@ -61,7 +60,6 @@
     <select id="listNotEnableHomeByRole" resultMap="BaseResultMap">
         SELECT DISTINCT h.id,
                         h.NAME,
-                        h.width_value,
                         component,
                         preview_img,
                         description

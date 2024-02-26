@@ -8,6 +8,7 @@ import java.util.List;
 public class HomeEnableVO {
     private Integer userInfoId;
     private Integer roleId;
+    private Integer widthValue;
     private String enableType;
     private List<HomeOrderVO> enableData;
 }

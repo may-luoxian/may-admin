@@ -12,6 +12,9 @@ public class HomeVO {
     @ApiModelProperty(name = "userId", value = "修改门户的用户Id", dataType = "Integer")
     private Integer userId;
 
+    @ApiModelProperty(name = "userId", value = "修改门户的角色Id", dataType = "Integer")
+    private Integer roleId;
+
     @ApiModelProperty(name = "name", value = "门户块名称", dataType = "String")
     private String name;
 

@@ -64,26 +64,42 @@ public class HomeServiceImpl extends ServiceImpl<HomeMapper, Home> implements Ho
         }
         if (homeVO.getControlStatus() == 1) {
             UserHome userHome = userHomeService.selectByUserId(homeVO.getUserId());
-            String homeOrder = userHome.getHomeOrder();
-            List<HomeOrderVO> homeOrderVOList = JSONUtil.toList(homeOrder, HomeOrderVO.class);
-            boolean flag = false;
-            for (HomeOrderVO item: homeOrderVOList) {
-                if (item.getHomeId() == homeVO.getId()) {
-                    item.setWidthValue(homeVO.getWidthValue());
-                    flag = true;
+            List<HomeOrderVO> homeOrderVOList = new ArrayList<>();
+            HomeOrderVO homeOrderVO = new HomeOrderVO();
+            homeOrderVO.setHomeId(homeVO.getId());
+            homeOrderVO.setWidthValue(homeVO.getWidthValue());
+            if (userHome != null) {
+                boolean flag = false;
+                String homeOrder = userHome.getHomeOrder();
+                homeOrderVOList = JSONUtil.toList(homeOrder, HomeOrderVO.class);
+                for (HomeOrderVO item : homeOrderVOList) {
+                    if (item.getHomeId() == homeVO.getId()) {
+                        item.setWidthValue(homeVO.getWidthValue());
+                        flag = true;
+                    }
                 }
-            }
-            if (!flag) {
-                HomeOrderVO homeOrderVO = new HomeOrderVO();
-                homeOrderVO.setHomeId(homeVO.getId());
-                homeOrderVO.setWidthValue(homeVO.getWidthValue());
+                if (!flag) {
+                    homeOrderVOList.add(homeOrderVO);
+                }
+                String str = JSONUtil.toJsonStr(homeOrderVOList);
+                userHome.setHomeOrder(str);
+                LambdaUpdateWrapper<UserHome> updateWrapper = new LambdaUpdateWrapper<UserHome>()
+                        .eq(UserHome::getUserInfoId, homeVO.getUserId());
+                userHomeService.update(userHome, updateWrapper);
+            } else {
+                UserHome userHome1 = new UserHome();
+                userHome1.setUserInfoId(homeVO.getUserId());
                 homeOrderVOList.add(homeOrderVO);
+                String str = JSONUtil.toJsonStr(homeOrderVOList);
+                userHome1.setHomeOrder(str);
+                userHomeService.save(userHome1);
             }
-            String str = JSONUtil.toJsonStr(homeOrderVOList);
-            userHome.setHomeOrder(str);
-            LambdaUpdateWrapper<UserHome> updateWrapper = new LambdaUpdateWrapper<UserHome>()
-                    .eq(UserHome::getUserInfoId, homeVO.getUserId());
-            userHomeService.update(userHome, updateWrapper);
+        } else if (homeVO.getControlStatus() == 3) {
+            LambdaUpdateWrapper<RoleHome> wrapper = new LambdaUpdateWrapper<RoleHome>()
+                    .set(RoleHome::getWidthValue, homeVO.getWidthValue())
+                    .eq(RoleHome::getRoleId, homeVO.getRoleId())
+                    .eq(RoleHome::getHomeId, homeVO.getId());
+            roleHomeService.update(wrapper);
         }
         Home home = BeanCopyUtil.copyObject(homeVO, Home.class);
         this.updateById(home);
@@ -95,15 +111,17 @@ public class HomeServiceImpl extends ServiceImpl<HomeMapper, Home> implements Ho
         List<HomeDTO> notEnableDTO = BeanCopyUtil.copyList(notEnableList, HomeDTO.class);
         List<HomeDTO> enableDTO = getOrderHomeList(userId);
         UserHome userHome = userHomeService.selectByUserId(userId);
-        List<HomeOrderVO> homeOrderVOList = JSONUtil.toList(userHome.getHomeOrder(), HomeOrderVO.class);
-        enableDTO.stream()
-                .forEach(homeDTO -> {
-                    homeOrderVOList.stream().forEach(homeOrderVO -> {
-                        if (homeDTO.getId() == homeOrderVO.getHomeId()) {
-                            homeDTO.setWidthValue(homeOrderVO.getWidthValue());
-                        }
+        if (userHome != null && userHome.getHomeOrder() != null) {
+            List<HomeOrderVO> homeOrderVOList = JSONUtil.toList(userHome.getHomeOrder(), HomeOrderVO.class);
+            enableDTO.stream()
+                    .forEach(homeDTO -> {
+                        homeOrderVOList.stream().forEach(homeOrderVO -> {
+                            if (homeDTO.getId() == homeOrderVO.getHomeId()) {
+                                homeDTO.setWidthValue(homeOrderVO.getWidthValue());
+                            }
+                        });
                     });
-                });
+        }
         return HomeEnableAndNotEnableDTO.builder()
                 .enableList(enableDTO)
                 .notEnableList(notEnableDTO)
@@ -144,6 +162,7 @@ public class HomeServiceImpl extends ServiceImpl<HomeMapper, Home> implements Ho
             List<RoleHome> collect = homeOrderList.stream().map(item -> RoleHome.builder()
                             .roleId(roleId)
                             .homeId(item.getHomeId())
+                            .widthValue(item.getWidthValue())
                             .orderNum(item.getOrderNum())
                             .build())
                     .collect(Collectors.toList());
@@ -177,20 +196,23 @@ public class HomeServiceImpl extends ServiceImpl<HomeMapper, Home> implements Ho
             return enableDTO;
         }
         String homeOrder = userHome.getHomeOrder();
-        List<HomeOrderVO> homeOrderVOList = JSONUtil.toList(homeOrder, HomeOrderVO.class);
-        homeOrderVOList.stream().sorted(Comparator.comparing(HomeOrderVO::getOrderNum));
-        List<HomeDTO> orderList = new ArrayList<>();
-        homeOrderVOList.stream().forEach((item) -> {
-            enableDTO.stream().forEach(enableHome -> {
-                if (ObjectUtils.isNotEmpty(enableHome) && item.getHomeId().equals(enableHome.getId())) {
-                    orderList.add(enableHome);
-                }
+        if (homeOrder != null) {
+            List<HomeOrderVO> homeOrderVOList = JSONUtil.toList(homeOrder, HomeOrderVO.class);
+            homeOrderVOList.stream().sorted(Comparator.comparing(HomeOrderVO::getOrderNum));
+            List<HomeDTO> orderList = new ArrayList<>();
+            homeOrderVOList.stream().forEach((item) -> {
+                enableDTO.stream().forEach(enableHome -> {
+                    if (ObjectUtils.isNotEmpty(enableHome) && item.getHomeId().equals(enableHome.getId())) {
+                        enableHome.setWidthValue(item.getWidthValue());
+                        orderList.add(enableHome);
+                    }
+                });
             });
-        });
-        return Stream.concat(orderList.stream(), enableDTO.stream())
-                .distinct()
-                .collect(Collectors.toList());
-
+            return Stream.concat(orderList.stream(), enableDTO.stream())
+                    .distinct()
+                    .collect(Collectors.toList());
+        }
+        return enableDTO;
     }
 }
 
