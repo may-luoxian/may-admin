@@ -1,6 +1,7 @@
 package com.myblog.strategy.impl;
 
 import com.myblog.config.properties.MinioProperties;
+import com.myblog.enums.FileTypeEnum;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import io.minio.StatObjectArgs;
@@ -33,6 +34,7 @@ public class MinioUploadStrategyImpl extends AbstrctUploadStrategyImpl {
                 PutObjectArgs.builder()
                         .bucket(minioProperties.getBucketName())
                         .object(path + fileName)
+                        .contentType(FileTypeEnum.getContentType(fileName))
                         .stream(inputStream, inputStream.available(), -1)
                         .build());
     }

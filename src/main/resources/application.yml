@@ -91,10 +91,10 @@ upload:
     accessKeySecret: OSS??accessKeySecret
     bucketName: OSS??bucketName
   minio:
-    url: http://127.0.0.1:9000/may-blog/
-    endpoint: http://127.0.0.1:9000
-    accesskey: BDQJwDl5yBnW2jvXswqS
-    secretKey: pGrLCpZRumyY00BWX5TOTGGdPctaKhPXMvQBau5W
+    url: http://49.232.158.14:9000/may-blog/
+    endpoint: http://49.232.158.14:9000
+    accesskey: developer
+    secretKey: syk20010416
     bucketName: may-blog
 
 #website:
