@@ -36,7 +36,7 @@ public class UserAuthController {
 
     @ApiOperation("上传头像")
     @PostMapping("/avatar")
-    public ResultVO<?> uploadAvatar(MultipartFile file) {
+    public ResultVO<?> uploadAvatar(@RequestParam MultipartFile file) {
         String path = userAuthService.uploadAvatar(file);
         return ResultVO.ok(path);
     }

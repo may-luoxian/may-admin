@@ -71,8 +71,6 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             TreeUtil.buildTree(rootList, childDTOMap, t, "children", false);
             return rootList;
         }
-
-
     }
 
     @Transactional(rollbackFor = Exception.class)
