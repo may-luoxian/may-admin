@@ -34,7 +34,7 @@ public class MinioUploadStrategyImpl extends AbstrctUploadStrategyImpl {
                 PutObjectArgs.builder()
                         .bucket(minioProperties.getBucketName())
                         .object(path + fileName)
-                        .contentType(FileTypeEnum.getContentType(fileName))
+//                        .contentType(FileTypeEnum.getContentType(fileName))
                         .stream(inputStream, inputStream.available(), -1)
                         .build());
     }

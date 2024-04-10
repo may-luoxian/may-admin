@@ -93,8 +93,8 @@ upload:
   minio:
     url: http://49.232.158.14:9000/may-blog/
     endpoint: http://49.232.158.14:9000
-    accesskey: developer
-    secretKey: syk20010416
+    accesskey: minioadmin
+    secretKey: minioadmin
     bucketName: may-blog
 
 #website:
