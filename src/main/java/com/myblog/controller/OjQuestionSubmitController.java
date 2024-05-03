@@ -7,6 +7,7 @@ import com.myblog.model.vo.oj.OjQuestionSubmitVO;
 import com.myblog.service.OjQuestionSubmitService;
 import com.myblog.util.UserUtil;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +22,8 @@ public class OjQuestionSubmitController {
     @Autowired
     private OjQuestionSubmitService ojQuestionSubmitService;
 
-    @PostMapping("/")
+    @ApiOperation("提交题目")
+    @PostMapping("/submit")
     public ResultVO<Integer> questionSubmit(OjQuestionSubmitVO questionSubmitVO) {
         if (questionSubmitVO == null || questionSubmitVO.getQuestionId() <= 0) {
             throw new BizException(StatusCodeEnum.VALID_ERROR.getDesc());
@@ -30,5 +32,11 @@ public class OjQuestionSubmitController {
         questionSubmitVO.setUserId(userInfoId);
         Integer questionSubmitId = ojQuestionSubmitService.questionSubmit(questionSubmitVO);
         return ResultVO.ok(questionSubmitId);
+    }
+
+    @ApiOperation("运行题目")
+    @PostMapping("/operation")
+    public ResultVO<Integer> questionOperation(OjQuestionSubmitVO questionSubmitVO) {
+        return ResultVO.ok();
     }
 }

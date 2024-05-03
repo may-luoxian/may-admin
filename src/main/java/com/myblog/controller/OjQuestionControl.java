@@ -62,4 +62,17 @@ public class OjQuestionControl {
         boolean b = ojQuestionService.removeByIds(ids);
         return ResultVO.ok(b);
     }
+
+    @ApiOperation("查询题目列表")
+    @GetMapping("/")
+    public ResultVO<List<OjQuestionDTO>> selectQuestions() {
+        List<OjQuestionDTO> ojQuestionDTOS = ojQuestionService.selectQuestionList();
+        return ResultVO.ok(ojQuestionDTOS);
+    }
+
+    @ApiOperation("根据id查询题目")
+    @GetMapping("/selectById/{id}")
+    public ResultVO<OjQuestionDTO> selectQuestionById(@PathVariable Integer id) {
+        return ResultVO.ok(ojQuestionService.selectQuestionById(id));
+    }
 }

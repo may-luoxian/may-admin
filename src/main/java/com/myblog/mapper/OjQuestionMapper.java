@@ -2,6 +2,10 @@ package com.myblog.mapper;
 
 import com.myblog.entity.OjQuestion;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
 * @author sunyukun
@@ -9,8 +13,11 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 * @createDate 2024-01-28 06:17:29
 * @Entity com.myblog.entity.OjQuestion
 */
+@Mapper
 public interface OjQuestionMapper extends BaseMapper<OjQuestion> {
+    List<OjQuestion> selectQuestionList();
 
+    OjQuestion selectQuestionById(@Param("id") Integer id);
 }
 
 

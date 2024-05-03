@@ -11,4 +11,6 @@ public class OjQuestionSubmitVO {
     private String language;
 
     private String code;
+
+    private String input;
 }

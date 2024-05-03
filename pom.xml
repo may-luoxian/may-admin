@@ -191,7 +191,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.3.7.RELEASE</version>
                 <configuration>
-                    <mainClass>com.aurora.AuroraSpringbootApplication</mainClass>
+                    <mainClass>com.myblog.MyblogApplication</mainClass>
                 </configuration>
                 <executions>
                     <execution>

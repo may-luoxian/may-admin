@@ -60,7 +60,7 @@ public class UserAuthServiceImpl extends ServiceImpl<UserAuthMapper, UserAuth> i
     public PageResultDTO<UserAdminDTO> listUsers(UserConditionVO conditionVO) {
         List<UserAdminDTO> userAdminDTOS = userAuthMapper.listUsers(PageUtil.getLimitCurrent(), PageUtil.getSize(), conditionVO);
         Integer count = userAuthMapper.countUser(conditionVO);
-        return new PageResultDTO<UserAdminDTO>(userAdminDTOS, count);
+        return new PageResultDTO<>(userAdminDTOS, count);
     }
 
     @Override

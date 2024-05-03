@@ -29,7 +29,7 @@ public class OjQuestionDTO {
 
     private JudgeConfigDTO judgeConfig;
 
-    private List<JudgeCaseDTO> judgeCases;
+    private List<JudgeCaseDTO> judgeCase;
 
     private Integer userId;
 
