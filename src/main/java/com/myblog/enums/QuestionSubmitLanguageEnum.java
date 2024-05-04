@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum QuestionSubmitLanguageEnum {
+    JavaScript("javascript", "javascript"),
     JAVA("java", "java"),
 
     CPP("c++", "c++"),

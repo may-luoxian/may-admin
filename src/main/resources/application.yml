@@ -116,3 +116,7 @@ knife4j:
         api-rule: package
         api-rule-resources:
           - com.myblog.controller
+
+# 代码沙箱配置
+codeSandBox:
+  type: example

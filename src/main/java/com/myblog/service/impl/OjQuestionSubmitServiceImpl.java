@@ -37,7 +37,7 @@ public class OjQuestionSubmitServiceImpl extends ServiceImpl<OjQuestionSubmitMap
         // 题目提交初始化操作
         Integer userInfoId = UserUtil.getUserDetailsDTO().getUserInfoId();
         OjQuestionSubmit questionSubmit = BeanCopyUtil.copyObject(questionSubmitVO, OjQuestionSubmit.class);
-        questionSubmit.setUserId(userInfoId);
+        questionSubmit.setUserInfoId(userInfoId);
         questionSubmit.setStatus(QuestionSubStateEnum.UNTREATED.getValue());
         JudgeInfoDTO judgeInfoDTO = new JudgeInfoDTO();
         questionSubmit.setJudgeInfo(JSONUtil.toJsonStr(judgeInfoDTO));

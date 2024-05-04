@@ -2,13 +2,13 @@ package com.myblog.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
 
-import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 /**
  * @TableName oj_question_submit
@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @TableName(value = "oj_question_submit")
-public class OjQuestionSubmit implements Serializable {
+public class OjQuestionSubmit {
     /**
      * id
      */
@@ -33,7 +33,7 @@ public class OjQuestionSubmit implements Serializable {
     /**
      * 创建用户id
      */
-    private Integer userId;
+    private Integer userInfoId;
 
     /**
      * 编程语言
@@ -65,18 +65,17 @@ public class OjQuestionSubmit implements Serializable {
     /**
      * 创建时间
      */
-    private Date createTime;
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createTime;
 
     /**
      * 更新时间
      */
-    private Date updateTime;
+    @TableField(fill = FieldFill.UPDATE)
+    private LocalDateTime updateTime;
 
     /**
      * 是否删除
      */
     private Integer isDelete;
-
-    @TableField(exist = false)
-    private static final long serialVersionUID = 1L;
 }
