@@ -6,6 +6,7 @@ import com.myblog.entity.OjQuestion;
 import com.myblog.entity.OjQuestionSubmit;
 import com.myblog.enums.QuestionSubStateEnum;
 import com.myblog.exception.BizException;
+import com.myblog.judge.JudgeService;
 import com.myblog.model.dto.oj.JudgeInfoDTO;
 import com.myblog.model.vo.oj.OjQuestionSubmitVO;
 import com.myblog.service.OjQuestionService;
@@ -16,17 +17,22 @@ import com.myblog.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.CompletableFuture;
+
 /**
-* @author sunyukun
-* @description 针对表【oj_question_submit】的数据库操作Service实现
-* @createDate 2024-01-28 06:19:53
-*/
+ * @author sunyukun
+ * @description 针对表【oj_question_submit】的数据库操作Service实现
+ * @createDate 2024-01-28 06:19:53
+ */
 @Service
 public class OjQuestionSubmitServiceImpl extends ServiceImpl<OjQuestionSubmitMapper, OjQuestionSubmit>
-    implements OjQuestionSubmitService{
+        implements OjQuestionSubmitService {
 
     @Autowired
     private OjQuestionService questionService;
+
+    @Autowired
+    private JudgeService judgeService;
 
     @Override
     public Integer questionSubmit(OjQuestionSubmitVO questionSubmitVO) {
@@ -45,6 +51,11 @@ public class OjQuestionSubmitServiceImpl extends ServiceImpl<OjQuestionSubmitMap
         if (!save) {
             throw new BizException("题目提交失败");
         }
-        return questionSubmit.getId();
+        // TODO: 执行判题服务
+        Integer questionSubmitId = questionSubmit.getId();
+        CompletableFuture.runAsync(() -> {
+            judgeService.doJudge(questionSubmitId);
+        });
+        return questionSubmitId;
     }
 }
