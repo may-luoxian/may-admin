@@ -11,7 +11,7 @@ import com.myblog.judge.codesandbox.model.ExecuteCodeRequest;
 import com.myblog.judge.codesandbox.model.ExecuteCodeResponse;
 import com.myblog.judge.strategy.JudgeContext;
 import com.myblog.model.dto.oj.JudgeCaseDTO;
-import com.myblog.model.dto.oj.JudgeInfoDTO;
+import com.myblog.judge.codesandbox.model.JudgeInfo;
 import com.myblog.service.OjQuestionService;
 import com.myblog.service.OjQuestionSubmitService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,19 +78,19 @@ public class JudgeServiceImpl implements JudgeService {
          * 4）其他错误处理
          */
         JudgeContext judgeContext = new JudgeContext();
-        judgeContext.setJudgeInfoDTO(executeCodeResponse.getJudgeInfo());
+        judgeContext.setJudgeInfo(executeCodeResponse.getJudgeInfo());
         judgeContext.setJudgeCaseDTOList(judgeCaseDTOS);
         judgeContext.setInputList(inputList);
         judgeContext.setOutputList(executeCodeResponse.getOutputList());
         judgeContext.setOjQuestion(ojQuestion);
         judgeContext.setOjQuestionSubmit(ojQuestionSubmit);
 
-        JudgeInfoDTO judgeInfoDTO = judgeManager.doJudge(judgeContext);
+        JudgeInfo judgeInfo = judgeManager.doJudge(judgeContext);
         // 6.更改题目提交状态为“成功”
         questionSubmit = new OjQuestionSubmit();
         questionSubmit.setId(questionSubmitId);
         questionSubmit.setStatus(QuestionSubStateEnum.SUCCESS.getValue());
-        questionSubmit.setJudgeInfo(JSONUtil.toJsonStr(judgeInfoDTO));
+        questionSubmit.setJudgeInfo(JSONUtil.toJsonStr(judgeInfo));
         update = ojQuestionSubmitService.updateById(questionSubmit);
         if (!update) {
             throw new BizException("题目状态更新错误");

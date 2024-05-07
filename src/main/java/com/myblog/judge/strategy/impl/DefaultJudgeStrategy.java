@@ -7,7 +7,7 @@ import com.myblog.judge.strategy.JudgeContext;
 import com.myblog.judge.strategy.JudgeStrategy;
 import com.myblog.model.dto.oj.JudgeCaseDTO;
 import com.myblog.model.dto.oj.JudgeConfigDTO;
-import com.myblog.model.dto.oj.JudgeInfoDTO;
+import com.myblog.judge.codesandbox.model.JudgeInfo;
 
 import java.util.List;
 
@@ -16,15 +16,15 @@ import java.util.List;
  */
 public class DefaultJudgeStrategy implements JudgeStrategy {
     @Override
-    public JudgeInfoDTO doJudge(JudgeContext judgeContext) {
-        JudgeInfoDTO judgeInfoDTO = judgeContext.getJudgeInfoDTO();
+    public JudgeInfo doJudge(JudgeContext judgeContext) {
+        JudgeInfo judgeInfo = judgeContext.getJudgeInfo();
         List<String> inputList = judgeContext.getInputList();
         List<String> outputList = judgeContext.getOutputList();
         OjQuestion ojQuestion = judgeContext.getOjQuestion();
         List<JudgeCaseDTO> judgeCaseDTOList = judgeContext.getJudgeCaseDTOList();
-        Long realMemory = judgeInfoDTO.getMemory();
-        Long realTime = judgeInfoDTO.getTime();
-        JudgeInfoDTO judgeInfoResponse = new JudgeInfoDTO();
+        Long realMemory = judgeInfo.getMemory();
+        Long realTime = judgeInfo.getTime();
+        JudgeInfo judgeInfoResponse = new JudgeInfo();
         judgeInfoResponse.setMemory(realMemory);
         judgeInfoResponse.setTime(realTime);
         JudgeInfoMsgEnum judgeInfoMsgEnum = JudgeInfoMsgEnum.ACCEPTED;

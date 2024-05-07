@@ -7,7 +7,7 @@ import com.myblog.entity.OjQuestionSubmit;
 import com.myblog.enums.QuestionSubStateEnum;
 import com.myblog.exception.BizException;
 import com.myblog.judge.JudgeService;
-import com.myblog.model.dto.oj.JudgeInfoDTO;
+import com.myblog.judge.codesandbox.model.JudgeInfo;
 import com.myblog.model.vo.oj.OjQuestionSubmitVO;
 import com.myblog.service.OjQuestionService;
 import com.myblog.service.OjQuestionSubmitService;
@@ -45,8 +45,8 @@ public class OjQuestionSubmitServiceImpl extends ServiceImpl<OjQuestionSubmitMap
         OjQuestionSubmit questionSubmit = BeanCopyUtil.copyObject(questionSubmitVO, OjQuestionSubmit.class);
         questionSubmit.setUserInfoId(userInfoId);
         questionSubmit.setStatus(QuestionSubStateEnum.UNTREATED.getValue());
-        JudgeInfoDTO judgeInfoDTO = new JudgeInfoDTO();
-        questionSubmit.setJudgeInfo(JSONUtil.toJsonStr(judgeInfoDTO));
+        JudgeInfo judgeInfo = new JudgeInfo();
+        questionSubmit.setJudgeInfo(JSONUtil.toJsonStr(judgeInfo));
         boolean save = this.save(questionSubmit);
         if (!save) {
             throw new BizException("题目提交失败");

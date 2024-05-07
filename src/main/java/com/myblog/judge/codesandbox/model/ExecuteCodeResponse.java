@@ -1,6 +1,5 @@
 package com.myblog.judge.codesandbox.model;
 
-import com.myblog.model.dto.oj.JudgeInfoDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,5 +27,5 @@ public class ExecuteCodeResponse {
     /**
      * 判题信息
      */
-    private JudgeInfoDTO judgeInfo;
+    private JudgeInfo judgeInfo;
 }

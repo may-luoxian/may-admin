@@ -1,9 +1,9 @@
-package com.myblog.model.dto.oj;
+package com.myblog.judge.codesandbox.model;
 
 import lombok.Data;
 
 @Data
-public class JudgeInfoDTO {
+public class JudgeInfo {
     private String message;
 
     private Long time;

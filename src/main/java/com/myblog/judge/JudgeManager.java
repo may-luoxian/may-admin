@@ -5,7 +5,7 @@ import com.myblog.enums.QuestionSubmitLanguageEnum;
 import com.myblog.judge.strategy.JudgeContext;
 import com.myblog.judge.strategy.JudgeStrategy;
 import com.myblog.judge.strategy.impl.DefaultJudgeStrategy;
-import com.myblog.model.dto.oj.JudgeInfoDTO;
+import com.myblog.judge.codesandbox.model.JudgeInfo;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class JudgeManager {
-    public JudgeInfoDTO doJudge(JudgeContext judgeContext) {
+    public JudgeInfo doJudge(JudgeContext judgeContext) {
         OjQuestionSubmit ojQuestionSubmit = judgeContext.getOjQuestionSubmit();
         String language = ojQuestionSubmit.getLanguage();
         JudgeStrategy judgeStrategy = new DefaultJudgeStrategy();

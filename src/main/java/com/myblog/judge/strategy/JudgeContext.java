@@ -3,7 +3,7 @@ package com.myblog.judge.strategy;
 import com.myblog.entity.OjQuestion;
 import com.myblog.entity.OjQuestionSubmit;
 import com.myblog.model.dto.oj.JudgeCaseDTO;
-import com.myblog.model.dto.oj.JudgeInfoDTO;
+import com.myblog.judge.codesandbox.model.JudgeInfo;
 import lombok.Data;
 
 import java.util.List;
@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Data
 public class JudgeContext {
-    private JudgeInfoDTO judgeInfoDTO;
+    private JudgeInfo judgeInfo;
 
     private List<String> inputList;
 
