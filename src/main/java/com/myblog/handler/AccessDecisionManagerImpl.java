@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * AccessDecisionManager 决策管理
  */
 public class AccessDecisionManagerImpl implements AccessDecisionManager {
-    // 授权决策
+    // 授权决策，判断该用户是否有接口权限，有则跳出，没有则执行AccessDeniedHandler
     @Override
     public void decide(Authentication authentication, Object o, Collection<ConfigAttribute> collection) throws AccessDeniedException, InsufficientAuthenticationException {
         List<String> permissionList = authentication.getAuthorities()

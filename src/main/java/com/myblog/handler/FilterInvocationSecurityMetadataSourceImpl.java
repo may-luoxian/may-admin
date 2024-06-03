@@ -15,6 +15,9 @@ import javax.annotation.PostConstruct;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * 该类用于构建资源与角色之间的映射关系
+ */
 @Component
 public class FilterInvocationSecurityMetadataSourceImpl implements FilterInvocationSecurityMetadataSource {
 
@@ -23,6 +26,7 @@ public class FilterInvocationSecurityMetadataSourceImpl implements FilterInvocat
 
     private static List<ResourceRoleDTO> resourceRoleList;
 
+    // 查询全部资源角色数据
     @PostConstruct
     private void loadResourceRoleList() {
         resourceRoleList = roleMapper.listResourceRoles();
@@ -32,7 +36,7 @@ public class FilterInvocationSecurityMetadataSourceImpl implements FilterInvocat
         resourceRoleList = null;
     }
 
-    // 获取访问当前资源所需权限，并对不满足条件的请求进行拦截
+    // 当接收到请求后，若请求参数匹配成功，构建角色数组，否则只生成disable角色
     @Override
     public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
         if (CollectionUtils.isEmpty(resourceRoleList)) {
